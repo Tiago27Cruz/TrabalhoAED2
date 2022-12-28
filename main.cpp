@@ -6,10 +6,11 @@
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
+int main() {
     Graph graph = Graph(3020);
     graph.insertAirports();
     graph.insertFlights();
+    graph.print_distance("Charles De Gaulle", "La Guardia");
     cout << "jomi\n";
     return 0;
 }

@@ -21,18 +21,19 @@ class Graph {
 public:
     // Constructor: nr nodes and direction (default: undirected)
     Graph(int nodes);
-
+    vector<Airport> best_flight(string src, string target);
     // Add edge from source to destination with a certain weight
     void addFlight(string src, string target, string airline);
 
     // Depth-First Search: example implementation
-    void dfs(int v);
+    void dfs(string src);
 
     // Breadth-First Search: example implementation
-    void bfs(int v);
+    void bfs(string src);
 
     void insertAirports();
     void insertFlights();
+    void print_distance(string src, string target);
 };
 
 

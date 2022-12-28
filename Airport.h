@@ -17,8 +17,9 @@ class Airport{
     string name;
     string city;
     string country;
-    float latitude;
-    float longitude;
+    double latitude;
+    double longitude;
+    double distance;
     list<Flight> flights;
     bool visited;
 
@@ -27,9 +28,15 @@ public:
     Airport(string code, string name, string city, string country, float latitude, float longitude);
     string getCode() const {return code;};
     list<Flight> getFlights() const {return flights;};
+    double get_latitude()const{return latitude;}
+    double get_longitude()const{return longitude;}
+    double get_distance()const{return distance;}
     bool wasVisited() const {return visited;};
     void setVisit(bool state);
+    void setDistance(int distance);
+    double calculateDistance(double lat1, double lon1, double lat2, double lon2);
     void AddFlight(Flight flight);
+    void print_distance();
 };
 
 struct airportHash
