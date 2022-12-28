@@ -1,0 +1,14 @@
+# ninja log v5
+29	2545	6938894912493743	CMakeFiles/main.cpp.dir/flight.cpp.obj	972cc76b30c9485a
+1	1806	6938895925121609	CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj	81ca73d32175faa5
+191	5966	6938895181379205	CMakeFiles/Airport.h.dir/flight.cpp.obj	3c20edf6f5b8eb06
+1	3318	6938894921063780	CMakeFiles/main.cpp.dir/Airport.cpp.obj	fa7509fef754e8cd
+34	4629	6938894934199052	CMakeFiles/main.cpp.dir/graph.cpp.obj	290432cfc9337198
+500	6551	6938895186009148	CMakeFiles/Airport.h.dir/Airport.cpp.obj	4bee9d10594cf9b1
+554	5988	6938895181879188	CMakeFiles/Airport.h.dir/main.cpp.obj	6d464dc8b34c8f71
+6	7006	6938895191669170	CMakeFiles/Airport.h.dir/graph.cpp.obj	d6c39b5c1d9c55f6
+7007	7906	6938895201209141	Airport.h.exe	93ef9728b619bce8
+21	2385	6938895931632407	CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj	dd837b63c4953821
+5	975	6938900447025350	CMakeFiles/TrabalhoAED2.dir/main.cpp.obj	51d95740406a6971
+8	3299	6938901787322267	CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj	8770651922acea88
+3300	3698	6938901791332243	TrabalhoAED2.exe	62d8f295ec979b7d

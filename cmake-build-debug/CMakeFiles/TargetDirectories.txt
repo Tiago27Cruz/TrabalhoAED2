@@ -1,0 +1,3 @@
+D:/AED/Trabalho AED2/cmake-build-debug/CMakeFiles/TrabalhoAED2.dir
+D:/AED/Trabalho AED2/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/AED/Trabalho AED2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
