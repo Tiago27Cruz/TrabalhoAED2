@@ -6,87 +6,78 @@
 #include <sstream>
 #include "graph.h"
 
-Graph::Graph(int num) : n(num) {
-}
+Graph::Graph(int num) : n(num) {}
+
+
 void Graph::addFlight(string src, string target, string airline){
     Flight flight = Flight(src, target, airline);
 
-    Airport airport = Airport(src);
-    airport = *airports.find(airport);
-
-    airports.erase(airport);
+    Airport& airport = airports[src];
     airport.AddFlight(flight);
-    airports.insert(airport);
 }
 vector<Airport> Graph::best_flight(string src, string target){
-
+    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
+        Airport& airport = iter->second;
+        airport.setVisit(false);
+    }
+    dfs(src);
 }
 
-void Graph::dfs(string src) {
-    // show node order
-    // cout << v << " ";
-    for (tabHAirport::iterator iter = airports.begin(); iter != airports.end(); iter++){
-        Airport airport = *iter;
-        airports.erase(airport);
-        airport.setVisit(false);
-        airports.insert(airport);
-    }
+int Graph::dfs(string src) {
 
-    Airport airport = Airport(src);
-    airport = *airports.find(airport);
-
-    airports.erase(airport);
+    Airport& airport = airports[src];
     airport.setVisit(true);
-    airports.insert(airport);
-
+    int size = 1;
     for (auto e : airport.getFlights()) {
         string wTarget = e.getTarget();
-        Airport w = Airport(wTarget);
-        w = *airports.find(w);
+        Airport& w = airports[wTarget];
         if (!w.wasVisited())
-            dfs(wTarget);
+            size += dfs(wTarget);
     }
+    return size;
 }
 
 void Graph::bfs(string src) {
-    for (tabHAirport::iterator iter = airports.begin(); iter != airports.end(); iter++){
-        Airport airport = *iter;
-        airports.erase(airport);
+    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
+        Airport& airport = iter->second;
+        for(auto e : airport.getFlights()){
+            e.setVisit(false);
+        }
         airport.setVisit(false);
-        airports.insert(airport);
+        airport.setDistance(-1.0);
     }
 
     queue<Airport> q;
-    Airport airport = Airport(src);
-    airport = *airports.find(airport);
+    Airport& airport = airports[src];
 
-    airports.erase(airport);
     airport.setDistance(0.0);
+    airport.setFlightnr(0);
+    airport.PathClear();
     airport.setVisit(true);
-    airports.insert(airport);
-
     q.push(airport);
     while (!q.empty()) {
         Airport u = q.front();
         q.pop();
         for (auto e : u.getFlights()) {
             string wTarget = e.getTarget();
-            Airport w = Airport(wTarget);
-            w = *airports.find(w);
-            airports.erase(w);
-            w.setDistance(w.calculateDistance(u.get_latitude(), u.get_longitude(), w.get_latitude(), w.get_longitude()) + u.get_distance());
-            airports.insert(w);
-            if (!w.wasVisited()) {
+            Airport& w = airports[wTarget];
+            double distance = w.calculateDistance(u.get_latitude(), u.get_longitude(), w.get_latitude(), w.get_longitude()) + u.get_distance();
+            if(w.get_distance() < distance) {
+                w.setDistance(distance);
+                w.setPath(u.get_path());
+                w.AddPath(w);
+                w.setFlightnr(u.get_flight_nr() + 1);
+            }
+            if (!e.wasVisited()) {
                 q.push(w);
-                w.setVisit(true);
+                e.setVisit(true);
             }
         }
     }
 }
 void Graph::print_distance(string src, string target){
     bfs(src);
-    Airport airport = Airport(target);
-    airport = *airports.find(airport);
+    Airport& airport = airports[target];
     airport.print_distance();
 }
 
@@ -109,7 +100,7 @@ void Graph::insertAirports() {
         float longitude = stof(tempLongitude);
 
         Airport airport = Airport(Code, Name, City, Country, latitude, longitude);
-        airports.insert(airport);
+        airports.insert(pair<string, Airport>(Code, airport));
 
     }
 }

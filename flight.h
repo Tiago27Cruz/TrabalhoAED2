@@ -12,10 +12,13 @@ class Flight{
     string source;
     string target;
     string airline;
+    bool visited;
 
 public:
     Flight(string source, string target, string airline);
     string getTarget(){return target;};
+    bool wasVisited() const {return visited;};
+    void setVisit(bool state) {visited = state;}
 };
 
 #endif //TRABALHO_AED2_FLIGHT_H

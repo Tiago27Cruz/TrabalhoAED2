@@ -6,6 +6,9 @@
 #include <string>
 #include <cmath>
 #include <iostream>
+Airport::Airport() {
+    this->code = "";
+}
 
 Airport::Airport(std::string code) {
     this->code = code;
@@ -22,6 +25,12 @@ Airport::Airport(string code, string name, string city, string country, float la
 
 void Airport::AddFlight(Flight flight) {
     flights.push_back(flight);
+}
+void Airport::AddPath(Airport airport){
+    path.push_back(airport);
+}
+void Airport::PathClear() {
+    path.clear();
 }
 
 void Airport::setVisit(bool state) {
@@ -50,6 +59,9 @@ double Airport::calculateDistance(double lat1, double lon1, double lat2, double 
 }
 void Airport::print_distance() {
     cout << distance << '\n';
+    for(Airport airport : path){
+        cout << airport.getCode() << '\n';
+    }
 }
 
 
