@@ -1,0 +1,6 @@
+Source,Target,Airline
+CDG,MAG,ANG
+CDG,LGA,ANG
+LGA,ORY,ANG
+MAG,ORY,ANG
+ORY,JFK,ANG

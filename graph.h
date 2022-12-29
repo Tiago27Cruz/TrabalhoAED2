@@ -17,8 +17,8 @@ using namespace std;
 
 class Graph {
     int n;              // Graph size (vertices are numbered from 1 to n)
-    unMap airports; // The list of airports being represented
-
+    unMap airports;     // The list of airports being represented
+    ciMap cities;
 public:
     // Constructor: nr nodes and direction (default: undirected)
     Graph(int nodes);
@@ -34,6 +34,9 @@ public:
     void insertAirports();
     void insertFlights();
     void print_distance(string src, string target);
+    void print_distance_bycity(string city, string target);
+    void print_bestpath(string src, string target);
+    void print_flightnr(string src, string target);
 };
 
 #endif //TRABALHO_AED2_GRAPH_H

@@ -15,15 +15,7 @@ void Graph::addFlight(string src, string target, string airline){
     Airport& airport = airports[src];
     airport.AddFlight(flight);
 }
-vector<Airport> Graph::best_flight(string src, string target){
-    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
-        Airport& airport = iter->second;
-        airport.setVisit(false);
-    }
-    dfs(src);
-}
-
-int Graph::dfs(string src) {
+/*int Graph::dfs(string src) {
 
     Airport& airport = airports[src];
     airport.setVisit(true);
@@ -35,16 +27,15 @@ int Graph::dfs(string src) {
             size += dfs(wTarget);
     }
     return size;
-}
+}*/
 
 void Graph::bfs(string src) {
     for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
         Airport& airport = iter->second;
-        for(auto e : airport.getFlights()){
-            e.setVisit(false);
-        }
         airport.setVisit(false);
         airport.setDistance(-1.0);
+        airport.setFlightnr(-1);
+        airport.PathClear();
     }
 
     queue<Airport> q;
@@ -53,26 +44,54 @@ void Graph::bfs(string src) {
     airport.setDistance(0.0);
     airport.setFlightnr(0);
     airport.PathClear();
+    airport.AddBestPath(airport);
     airport.setVisit(true);
     q.push(airport);
     while (!q.empty()) {
         Airport u = q.front();
         q.pop();
-        for (auto e : u.getFlights()) {
+        for (Flight &e : u.getFlights()) {
             string wTarget = e.getTarget();
-            Airport& w = airports[wTarget];
+            Airport &w = airports[wTarget];
             double distance = w.calculateDistance(u.get_latitude(), u.get_longitude(), w.get_latitude(), w.get_longitude()) + u.get_distance();
-            if(w.get_distance() < distance) {
-                w.setDistance(distance);
-                w.setPath(u.get_path());
-                w.AddPath(w);
-                w.setFlightnr(u.get_flight_nr() + 1);
+            int flight_nr = u.get_flight_nr() + 1;
+            if (w.get_flight_nr() >= flight_nr || w.get_flight_nr() <= 0) {
+                if (w.get_flight_nr() == flight_nr) {
+                    if(w.get_distance() > distance){
+                        w.change_best_path();
+                        w.setBestPath(u.get_best_path());
+                        w.AddBestPath(w);
+                        w.AddBranch(u.get_path(), w);
+                        w.setDistance(distance);
+                        w.setFlightnr(flight_nr);
+                    }
+                    else{
+                        w.AddBranch(u.get_path(), u.get_best_path(), w);
+                    }
+                }
+                else if(w.get_flight_nr() != flight_nr){
+                    w.setDistance(distance);
+                    w.setBestPath(u.get_best_path());
+                    w.AddBestPath(w);
+                    w.setPath(u.get_path());
+                    w.AddPath(w);
+                    w.setFlightnr(flight_nr);
+                }
             }
-            if (!e.wasVisited()) {
+            if (!w.wasVisited()) {
                 q.push(w);
-                e.setVisit(true);
+                w.setVisit(true);
             }
         }
+    }
+}
+void Graph::print_distance_bycity(string city, string target) {
+    vector<string> &city_airports = cities[city];
+    for(string code : city_airports){
+        cout << code << '\n';
+        /*print_distance(code, target);
+        print_bestpath(code, target);
+        print_flightnr(code, target);*/
     }
 }
 void Graph::print_distance(string src, string target){
@@ -80,10 +99,20 @@ void Graph::print_distance(string src, string target){
     Airport& airport = airports[target];
     airport.print_distance();
 }
+void Graph::print_bestpath(string src, string target){
+    bfs(src);
+    Airport &airport = airports[target];
+    airport.print_bestpath();
+}
+void Graph::print_flightnr(string src, string target){
+    bfs(src);
+    Airport &airport = airports[target];
+    airport.print_flightnr();
+}
 
 void Graph::insertAirports() {
     ifstream fout;
-    string file = "../airports.csv";
+    string file = "../tempAirport.csv";
     fout.open(file);
     string temp, Code, Name, City, Country, tempLatitude, tempLongitude;
     getline(fout, temp);
@@ -101,13 +130,15 @@ void Graph::insertAirports() {
 
         Airport airport = Airport(Code, Name, City, Country, latitude, longitude);
         airports.insert(pair<string, Airport>(Code, airport));
+        vector<string> &city_data = cities[City];
+        city_data.push_back(Code);
 
     }
 }
 
 void Graph::insertFlights(){
     ifstream fout;
-    string file = "../flights.csv";
+    string file = "../tempFlight.csv";
     fout.open(file);
     string temp, source, target, airline;
     getline(fout, temp);
