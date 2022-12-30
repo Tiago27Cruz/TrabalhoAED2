@@ -11,9 +11,9 @@ int main() {
     graph.insertAirports();
     graph.insertFlights();
     //graph.print_distance_bycity("Paris", "JFK");
-    graph.print_distance("MAG", "JFK");
-    graph.print_bestpath("MAG", "JFK");
-    graph.print_flightnr("MAG", "JFK");
+    //graph.print_by_cords(49.012779, 2.550000, 25, "JFK");
+    graph.printAll("CDG", "MAG");
+    //graph.print_bestpath("CDG", "JFK");
     cout << "jomi\n";
     return 0;
 }

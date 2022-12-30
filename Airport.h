@@ -9,10 +9,21 @@
 #include <string>
 #include <list>
 #include <vector>
-#include <unordered_set>
+#include <set>
 #include <unordered_map>
+#include <unordered_set>
 
 using namespace std;
+struct VectorHash
+{
+    int operator() (const vector<string> &a) const {
+        return 0;
+    }
+    bool operator()(const vector<string> &a1, const vector<string> &a2)const{
+        return (a1 == a2);
+    }
+};
+typedef unordered_set<vector<string>, VectorHash, VectorHash> unSet;
 
 class Airport{
     string code;
@@ -23,8 +34,8 @@ class Airport{
     double longitude;
     double distance;
     int flight_nr;
-    vector<vector<Airport>> path;
-    vector<Airport> best_path;
+    vector<vector<string>> path;
+    vector<string> best_path;
     list<Flight> flights;
     bool visited;
 
@@ -39,29 +50,27 @@ public:
     double get_longitude()const{return longitude;}
     double get_distance()const{return distance;}
     int get_flight_nr()const{return flight_nr;}
-    vector<vector<Airport>> get_path()const{return path;}
-    vector<Airport> get_best_path()const{return best_path;}
+    vector<vector<string>> get_path()const{return path;}
+    vector<string> get_best_path()const{return best_path;}
     bool wasVisited() const {return visited;};
     void setVisit(bool state);
-    void setDistance(int distance);
+    void setDistance(double distance);
     void setFlightnr(int flight_nr){this->flight_nr = flight_nr;}
-    void setPath(vector<vector<Airport>> path){this->path = path;}
-    void setBestPath(vector<Airport> best_path){this->best_path = best_path;}
+    void setPath(vector<vector<string>> path){this->path = path;}
+    void setBestPath(vector<string> best_path){this->best_path = best_path;}
     void change_best_path();
     double calculateDistance(double lat1, double lon1, double lat2, double lon2);
     void AddFlight(Flight flight);
-    void AddPath(Airport airport);
-    void AddBestPath(Airport airport);
-    void AddBranch(vector<vector<Airport>> path, vector<Airport> best_path, Airport airport);
-    void AddBranch(vector<vector<Airport>> path, Airport airport);
+    void AddPath(string code);
+    void AddBestPath(string code);
+    void AddBranch(vector<vector<string>> path, vector<string> best_path, string code);
+    void AddBranch(vector<vector<string>> path, string code);
     void PathClear();
-    void print_distance();
+    void print_bestdistance();
     void print_bestpath();
+    void print_bestpaths();
     void print_flightnr();
 };
-
-
-
 struct AirportHash
 {
     int operator() (const Airport &a) const {
@@ -81,7 +90,7 @@ struct CityHash
     }
 };
 
-
 typedef unordered_map<string, Airport, AirportHash, AirportHash> unMap;
 typedef unordered_map<string, vector<string>, CityHash, CityHash> ciMap;
+
 #endif //TRABALHO_AED2_AEROPORTO_H

@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 #include <iostream>
+
 Airport::Airport() {
     this->code = "";
 }
@@ -26,25 +27,25 @@ Airport::Airport(string code, string name, string city, string country, float la
 void Airport::AddFlight(Flight flight) {
     flights.push_back(flight);
 }
-void Airport::AddPath(Airport airport) {
-    for(vector<Airport> v : path){
-        v.push_back(airport);
+void Airport::AddPath(string code) {
+    for(vector<string> &v : path){
+        v.push_back(code);
     }
 }
-void Airport::AddBestPath(Airport airport){
-    best_path.push_back(airport);
+void Airport::AddBestPath(string code){
+    best_path.push_back(code);
 }
-void Airport::AddBranch(vector<vector<Airport>> path, vector<Airport> best_path, Airport airport){
-    for(vector<Airport> v : path) {
-        v.push_back(airport);
+void Airport::AddBranch(vector<vector<string>> path, vector<string> best_path, string code){
+    for(vector<string> v : path) {
+        v.push_back(code);
         this->path.push_back(v);
     }
-    best_path.push_back(airport);
+    best_path.push_back(code);
     this->path.push_back(best_path);
 }
-void Airport::AddBranch(vector<vector<Airport>> path, Airport airport){
-    for(vector<Airport> v : path) {
-        v.push_back(airport);
+void Airport::AddBranch(vector<vector<string>> path, string code){
+    for(vector<string> v : path) {
+        v.push_back(code);
         this->path.push_back(v);
     }
 }
@@ -59,7 +60,7 @@ void Airport::PathClear() {
 void Airport::setVisit(bool state) {
     visited = state;
 }
-void Airport::setDistance(int distance) {
+void Airport::setDistance(double distance) {
     this->distance = distance;
 }
 double Airport::calculateDistance(double lat1, double lon1, double lat2, double lon2){
@@ -80,17 +81,40 @@ double Airport::calculateDistance(double lat1, double lon1, double lat2, double 
     double c = 2 * asin(sqrt(a));
     return rad * c;
 }
-void Airport::print_distance() {
-    cout << distance << '\n';
+void Airport::print_bestdistance() {
+    cout << "The Bestpath distance is : " << distance << '\n';
 }
 void Airport::print_bestpath(){
+    cout << "The Bestpath is :\n";
     for(int i = 0; i<best_path.size(); i++) {
-        cout << best_path[i].getCode() << " ";
+        if(i != 0) cout << " -> ";
+        cout << best_path[i];
     }
     cout << '\n';
 }
+
+void Airport::print_bestpaths(){
+    /*cout << "Possible paths :\n";
+    unSet s;
+    for (int i = 0; i< path.size(); i++) {
+        s.insert(path[i]);
+    }*/
+    for(vector<vector<string>>::iterator iter=path.begin(); iter!=path.end(); ++iter) {
+        for (int j = 0; j<iter->size(); j++) {
+            if(j!=0) cout << " -> ";
+            cout << iter->at(j);
+        }
+        cout << '\n';
+    }
+    for(int i = 0; i<best_path.size(); i++) {
+        if(i != 0) cout << " -> ";
+        cout << best_path[i];
+    }
+    cout << '\n';
+}
+
 void Airport::print_flightnr(){
-    cout << flight_nr << '\n';
+    cout << "The Bestpath flight number is : " << flight_nr << '\n';
 }
 
 

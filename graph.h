@@ -11,6 +11,7 @@
 #include <iostream>
 #include <unordered_map>
 #include "Airport.h"
+#include <stack>
 #include <string.h>
 
 using namespace std;
@@ -29,14 +30,19 @@ public:
     int dfs(string src);
 
     // Breadth-First Search: example implementation
-    void bfs(string src);
+    void bfs(string src, string target);
+    void bfs(string src, string target, string airline);
 
     void insertAirports();
     void insertFlights();
-    void print_distance(string src, string target);
+    void print_bestdistance(string src, string target);
     void print_distance_bycity(string city, string target);
+    void print_by_cords(double latitude, double longitude, double distance, string target);
     void print_bestpath(string src, string target);
-    void print_flightnr(string src, string target);
+    void print_bestpaths(string src, string target);
+    void print_bestflightnr(string src, string target);
+    void printAll(string src, string target);
+    void printAll(string src, string target, stack<string> airlines);
 };
 
 #endif //TRABALHO_AED2_GRAPH_H

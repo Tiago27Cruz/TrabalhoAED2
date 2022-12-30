@@ -17,6 +17,7 @@ class Flight{
 public:
     Flight(string source, string target, string airline);
     string getTarget(){return target;};
+    string getAirline(){return airline;};
     bool wasVisited() const {return visited;};
     void setVisit(bool state) {visited = state;}
 };
