@@ -34,6 +34,7 @@ class Airport{
     double longitude;
     double distance;
     int flight_nr;
+    int total_flight_nr;
     vector<vector<string>> path;
     vector<string> best_path;
     list<Flight> flights;
@@ -50,11 +51,13 @@ public:
     double get_longitude()const{return longitude;}
     double get_distance()const{return distance;}
     int get_flight_nr()const{return flight_nr;}
+    int get_total_flight_nr()const{return total_flight_nr;}
     vector<vector<string>> get_path()const{return path;}
     vector<string> get_best_path()const{return best_path;}
     bool wasVisited() const {return visited;};
     void setVisit(bool state);
     void setDistance(double distance);
+    void set_total_flight_number(int total_flight_number){this->total_flight_nr = total_flight_number;}
     void setFlightnr(int flight_nr){this->flight_nr = flight_nr;}
     void setPath(vector<vector<string>> path){this->path = path;}
     void setBestPath(vector<string> best_path){this->best_path = best_path;}
@@ -68,7 +71,6 @@ public:
     void PathClear();
     void print_bestdistance();
     void print_bestpath();
-    void print_bestpaths();
     void print_flightnr();
 };
 struct AirportHash

@@ -85,20 +85,7 @@ void Airport::print_bestdistance() {
     cout << "The Bestpath distance is : " << distance << '\n';
 }
 void Airport::print_bestpath(){
-    cout << "The Bestpath is :\n";
-    for(int i = 0; i<best_path.size(); i++) {
-        if(i != 0) cout << " -> ";
-        cout << best_path[i];
-    }
-    cout << '\n';
-}
-
-void Airport::print_bestpaths(){
-    /*cout << "Possible paths :\n";
-    unSet s;
-    for (int i = 0; i< path.size(); i++) {
-        s.insert(path[i]);
-    }*/
+    cout << "Possible paths :\n";
     for(vector<vector<string>>::iterator iter=path.begin(); iter!=path.end(); ++iter) {
         for (int j = 0; j<iter->size(); j++) {
             if(j!=0) cout << " -> ";
@@ -106,6 +93,7 @@ void Airport::print_bestpaths(){
         }
         cout << '\n';
     }
+    cout << "The shortest path is :\n";
     for(int i = 0; i<best_path.size(); i++) {
         if(i != 0) cout << " -> ";
         cout << best_path[i];
