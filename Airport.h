@@ -45,6 +45,7 @@ public:
     Airport(string code);
     Airport(string code, string name, string city, string country, float latitude, float longitude);
     string getCode() const {return code;};
+    string getCountry() const {return country;};
     string getCity() const {return city;};
     list<Flight>& getFlights() {return flights;};
     double get_latitude()const{return latitude;}

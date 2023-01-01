@@ -15,19 +15,31 @@ void Graph::addFlight(string src, string target, string airline){
     Airport& airport = airports[src];
     airport.AddFlight(flight);
 }
-int Graph::dfs(string src) {
-
+int Graph::dfs(string src, int max) {
+    if(max == 0){
+        return 0;
+    }
     Airport& airport = airports[src];
     airport.setVisit(true);
-    int size = 0;
     for (Flight &e : airport.getFlights()) {
         string wTarget = e.getTarget();
         Airport& w = airports[wTarget];
-        size++;
-        if (!w.wasVisited())
-            size += dfs(wTarget);
+        if(different_airlines.find(e.getAirline()) == different_airlines.end()){
+            different_airlines.insert(e.getAirline());
+        }
+        total_flights++;
+        if (!w.wasVisited()) {
+            if (different_countries.find(w.getCountry()) == different_countries.end()) {
+                different_countries.insert(w.getCountry());
+            }
+            if(different_cities.find(w.getCity()) == different_cities.end()){
+                different_cities.insert(w.getCity());
+            }
+            destination_count++;
+            dfs(wTarget, max-1);
+        }
     }
-    return size;
+    return 0;
 }
 
 void Graph::bfs(string src, string target) {
@@ -286,29 +298,19 @@ void Graph::bfs_bycords(double latitude, double longitude, double distance, stri
     target_airport.setBestPath(best_path);
     target_airport.setPath(path);
     target_airport.setFlightnr(flight_nr);
-    target_airport.setDistance(distance);
-    /*
-    if(best_path.empty()){
-        cout << "no flights to " << target << '\n';
+    target_airport.setDistance(dist);
+}
+void Graph::dfs_normal(string src, int max){
+    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
+        Airport& airport = iter->second;
+        airport.setVisit(false);
     }
-    else {
-        cout << "From " << best_path[0] << " to " << target << ":\n";
-        for (int i = 0; i < path.size(); i++) {
-            for (int z = 0; z < path[i].size(); z++) {
-                if (z != 0) cout << " -> ";
-                cout << path[i][z];
-            }
-            cout << '\n';
-        }
-        cout << "The Bestpath is :\n";
-        for (int i = 0; i < best_path.size(); i++) {
-            if (i != 0) cout << " -> ";
-            cout << best_path[i];
-        }
-        cout << '\n';
-        cout << "The Bestpath flight number is : " << flight_nr << '\n';
-        cout << "The Bestpath distance is : " << dist << '\n';
-    }*/
+    destination_count = 0;
+    total_flights = 0;
+    different_countries.clear();
+    different_airlines.clear();
+    different_cities.clear();
+    dfs(src, max);
 }
 void Graph::print_bestdistance(string src, string target){
     bfs(src, target);
@@ -329,6 +331,7 @@ void Graph::print_bestcordpath(double latitude, double longitude, double distanc
     bfs_bycords(latitude, longitude, distance, target);
     Airport &airport = airports[target];
     airport.print_bestpath();
+    airport.print_bestdistance();
 }
 void Graph::print_bestflightnr(string src, string target){
     bfs(src, target);
@@ -336,11 +339,35 @@ void Graph::print_bestflightnr(string src, string target){
     airport.print_flightnr();
 }
 void Graph::print_all_flights(string src){
-    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
-        Airport& airport = iter->second;
-        airport.setVisit(false);
-    }
-    cout << "All " << src << "flights: " << dfs(src) << '\n';
+    cout << "Total " << src << " flights: " << total_flights << '\n';
+}
+void Graph::print_all_different_airlines(string src){
+    cout << "Total " << src << " different airline flights: " << different_airlines.size() << '\n';
+}
+void Graph::print_all_different_destinies(string src){
+    cout << "Total " << src << " different destinies: " << destination_count << '\n';
+}
+void Graph::print_all_different_countries(string src){
+    cout << "Total " << src << " different countries: " << different_countries.size() << '\n';
+}
+void Graph::print_all_different_cities(string src){
+    cout << "Total " << src << " different cities: " << different_cities.size() << '\n';
+}
+void Graph::print_all_airport_information(string src){
+    dfs_normal(src, -1);
+    print_all_flights(src);
+    print_all_different_airlines(src);
+    print_all_different_destinies(src);
+    print_all_different_countries(src);
+    print_all_different_cities(src);
+}
+void Graph::print_all_airport_information_in_range(string src, int max){
+    dfs_normal(src, max);
+    print_all_flights(src);
+    print_all_different_airlines(src);
+    print_all_different_destinies(src);
+    print_all_different_countries(src);
+    print_all_different_cities(src);
 }
 void Graph::printAll(string src, string target){
     bfs(src, target);
@@ -368,7 +395,7 @@ void Graph::printAll(string src, string target, unordered_set<string> airlines){
 
 void Graph::insertAirports() {
     ifstream fout;
-    string file = "../airports.csv";
+    string file = "../tempAirport.csv";
     fout.open(file);
     string temp, Code, Name, City, Country, tempLatitude, tempLongitude;
     getline(fout, temp);
@@ -391,7 +418,7 @@ void Graph::insertAirports() {
 
 void Graph::insertFlights(){
     ifstream fout;
-    string file = "../flights.csv";
+    string file = "../tempFlight.csv";
     fout.open(file);
     string temp, source, target, airline;
     getline(fout, temp);

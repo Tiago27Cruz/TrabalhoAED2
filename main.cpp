@@ -11,6 +11,7 @@ int main() {
     Graph graph = Graph(3020);
     graph.insertAirports();
     graph.insertFlights();
+    graph.print_all_airport_information_in_range("CDG", 1);
     /*stack<string> stk;
     stk.push("Menu");
     cout << "Welcome Message\n";
@@ -72,12 +73,12 @@ int main() {
         }
 
     }*/
-    string s = " ";
+    /*string s = " ";
     cout << "begin" << '\n';
     while(s != "back") {
         cin >> s;
         if (s == "all") {
-            //graph.print_by_cords(49.012779, 2.550000, 800, "MAG");
+            graph.print_bestcordpath(49.012779, 2.550000, 50, "MAG");
             //graph.printAll_bycity("Paris", "JFK");
         }
         if(s == "airline"){
@@ -89,7 +90,7 @@ int main() {
             graph.printAll("CDG", "MAG", airlines);
         }
         if(s == "flights"){
-            graph.print_all_flights("CDG");
+            graph.print_all_airport_information("CDG");
         }
     }
     //graph.printAll_bycity("Paris", "JFK");
@@ -97,6 +98,6 @@ int main() {
     //graph.printAll("ORY", "JFK");
     //graph.print_bestpath("CDG", "JFK");
     //graph.print_bestdistance("CDG", "MAG");
-    cout << "jomi\n";
+    cout << "jomi\n";*/
     return 0;
 }
