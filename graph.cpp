@@ -582,6 +582,7 @@ void Graph::insertFlights() {
             f.flight_airline.insert(airline);
             stats.addCountry(airports[source].country, "flights");
             stats.addCity(airports[source].city, "flights");
+            stats.addAirline(airline, "flights");
         }
         else {
             Flight flight;

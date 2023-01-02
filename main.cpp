@@ -28,7 +28,7 @@ int main() {
     graph.print_bestPath("CDG", "MAG");
     graph.print_typeInCountry("United States", "all");
     graph.print_typeInCity("Paris", "all");
-    graph.print_totalArticulationPoints();
+    //graph.print_totalArticulationPoints();
     //graph.print_all_airport_information_in_range("CDG", 1);
     //graph.printAll("CDG", "MAG");
 

@@ -43,6 +43,15 @@ void Estatisticas::addCity(string city, string type) {
         }
     }
 }
+void Estatisticas::addAirline(string airline, string type) {
+    if(type == "flights"){
+        if(airlines.find(airline)==airlines.end()){
+            airlines.insert(pair<string, vector<int>>(airline, {1}));
+        } else {
+            airlines[airline][0] = airlines.find(airline)->second[0] +1;
+        }
+    }
+}
 
 void Estatisticas::print_typeInCountry(string country, string type) {
     if(type == "airport")cout << "There are " << countries[country][0] << " airports in " << country << '\n';

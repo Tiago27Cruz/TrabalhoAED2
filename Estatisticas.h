@@ -14,11 +14,15 @@ using namespace std;
 class Estatisticas {
     unordered_map<string, vector<int>> countries;
     unordered_map<string, vector<int>> cities;
+    unordered_map<string, vector<int>> airlines;
 public:
     void addCountry(string country, string type);
     void addCity(string city, string type);
+    void addAirline(string airline, string type);
+
     void print_typeInCountry(string country, string type);
     void print_typeInCity(string city, string type);
+    void print_typeByAirline(string airline, string type);
 };
 
 
