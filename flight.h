@@ -1,7 +1,6 @@
 //
 // Created by Tiago Cruz on 27/12/2022.
 //
-
 #ifndef TRABALHO_AED2_FLIGHT_H
 #define TRABALHO_AED2_FLIGHT_H
 #include <string>

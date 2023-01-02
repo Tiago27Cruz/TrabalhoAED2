@@ -10,8 +10,12 @@ using namespace std;
 int main() {
     Graph graph = Graph(3020);
     graph.insertAirports();
+    graph.insertAirline();
     graph.insertFlights();
+    cout << "begin" << '\n';
+    //graph.print_bestcitypath("Paris", "MAG");
     graph.print_all_airport_information_in_range("CDG", 1);
+    //graph.printAll("CDG", "MAG");
     /*stack<string> stk;
     stk.push("Menu");
     cout << "Welcome Message\n";

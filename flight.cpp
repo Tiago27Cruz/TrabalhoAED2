@@ -1,7 +1,6 @@
 //
 // Created by Tiago Cruz on 27/12/2022.
 //
-
 #include "flight.h"
 
 Flight::Flight(string source, string target, string airline){
