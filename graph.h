@@ -13,6 +13,7 @@
 #include <unordered_set>
 #include <stack>
 #include <string.h>
+#include "Estatisticas.h"
 
 using namespace std;
 class Graph {
@@ -41,6 +42,10 @@ class Graph {
         list<vector<string>> path;
         unordered_map<string, Flight> flights;
         bool visited;
+        bool in_stack;
+        bool is_articulation;
+        int num;
+        int low;
     };
     typedef unordered_map<string, Airport> unMap;
     typedef unordered_map<string, Airline> unAir;
@@ -54,38 +59,47 @@ class Graph {
     unordered_set<string> different_countries;
     unordered_set<string> different_cities;
     //ciMap cities;
+    Estatisticas stats;
 public:
-    // Constructor: nr nodes and direction (default: undirected)
     Graph(int nodes);
     vector<Airport> best_flight(string src, string target);
-    // Add edge from source to destination with a certain weight
     void addFlight(string src, string target, string airline);
-    // Depth-First Search: example implementation
-    int dfs(string src, int max);
+    unMap get_airports() {return airports;};
 
-    // Breadth-First Search: example implementation
+    void dfs(string src, int max);
+    void dfs_normal(string src, int max);
+    void dfs_articulation(Airport& airport, stack<Airport>* node_stack, list<Airport>* res, int index);
+
     void AddBestPath(Airport& airport);
     double calculateDistance(double lat1, double lon1, double lat2, double lon2);
     void AddBranch(list<vector<string>> path, vector<string> best_path, Airport& airport);
     void AddBranch(list<vector<string>> path, Airport& airport);
     void AddPath(Airport& airport);
+
     void bfs(string src, string target);
     void bfs(string src, string target, unordered_set<string> airlines);
     void bfs_bycity(string city, string target);
     void bfs_bycity(string city, string target, unordered_set<string> airlines);
     void bfs_bycords(double latitude, double longitude, double distance, string target);
     void bfs_bycords(double latitude, double longitude, double distance, string target, unordered_set<string> airlines);
-    void dfs_normal(string src, int max);
+
+
 
     void insertAirports();
     void insertFlights();
     void insertAirline();
-    void print_bestdistance(Airport airport);
-    void print_bestdistance(string src, string target);
-    void print_bestpath(Airport airport);
-    void print_bestpath(string src, string target);
-    void print_bestcitypath(string src, string target);
-    void print_bestcordpath(double latitude, double longitude, double distance, string target);
+
+    void print_totalArticulationPoints();
+
+    void print_typeInCountry(string Country, string type);
+    void print_typeInCity(string City, string type);
+
+    void print_bestDistance(Airport airport);
+    void print_bestDistance(string src, string target);
+    void print_bestPath(Airport airport);
+    void print_bestPath(string src, string target);
+    void print_bestCityPath(string src, string target);
+    void print_bestCordPath(double latitude, double longitude, double distance, string target);
     void print_flightnr(Airport airport);
     void print_bestflightnr(string src, string target);
     void print_all_flights(string src);
@@ -97,6 +111,8 @@ public:
     void print_all_airport_information_in_range(string src, int max);
     void printAll(string src, string target);
     void printAll(string src, string target, unordered_set<string> airlines);
+
+    string find_code(string name);
 };
 
 #endif //TRABALHO_AED2_GRAPH_H

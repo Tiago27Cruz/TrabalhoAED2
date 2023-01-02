@@ -56,10 +56,10 @@ RM = "C:\Program Files\JetBrains\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2"
+CMAKE_SOURCE_DIR = C:\Users\Isabel\Documents\GitHub\TrabalhoAED2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug"
+CMAKE_BINARY_DIR = C:\Users\Isabel\Documents\GitHub\TrabalhoAED2\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\CMakeFiles" "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\\CMakeFiles\progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Isabel\Documents\GitHub\TrabalhoAED2\cmake-build-debug\CMakeFiles C:\Users\Isabel\Documents\GitHub\TrabalhoAED2\cmake-build-debug\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Isabel\Documents\GitHub\TrabalhoAED2\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -151,6 +151,30 @@ Airport.s: Airport.cpp.s
 Airport.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/Airport.cpp.s
 .PHONY : Airport.cpp.s
+
+Estatisticas.obj: Estatisticas.cpp.obj
+.PHONY : Estatisticas.obj
+
+# target to build an object file
+Estatisticas.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj
+.PHONY : Estatisticas.cpp.obj
+
+Estatisticas.i: Estatisticas.cpp.i
+.PHONY : Estatisticas.i
+
+# target to preprocess a source file
+Estatisticas.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.i
+.PHONY : Estatisticas.cpp.i
+
+Estatisticas.s: Estatisticas.cpp.s
+.PHONY : Estatisticas.s
+
+# target to generate assembly for a file
+Estatisticas.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.s
+.PHONY : Estatisticas.cpp.s
 
 flight.obj: flight.cpp.obj
 .PHONY : flight.obj
@@ -236,6 +260,9 @@ help:
 	@echo ... Airport.obj
 	@echo ... Airport.i
 	@echo ... Airport.s
+	@echo ... Estatisticas.obj
+	@echo ... Estatisticas.i
+	@echo ... Estatisticas.s
 	@echo ... flight.obj
 	@echo ... flight.i
 	@echo ... flight.s
