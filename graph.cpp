@@ -85,13 +85,13 @@ void Graph::dfs_normal(string src, int max){
     dfs(src, max);
 }
 
-void Graph::dfs_articulation(Airport& airport, stack<Airport> *airport_stack, list<Airport> *res, int index) {
+void Graph::dfs_articulation(Airport& airport, stack<Airport*>& airport_stack, list<Airport> *res, int index) {
     airport.visited = true;
     airport.low = index;
     airport.num = index;
     index++;
     airport.in_stack = true;
-    airport_stack->push(airport);
+    airport_stack.push(&airport);
 
     int count = 0;
     for (unordered_map<string, Flight>::iterator iter = airport.flights.begin(); iter != airport.flights.end(); iter++) {
@@ -119,44 +119,42 @@ void Graph::dfs_articulation(Airport& airport, stack<Airport> *airport_stack, li
     //res->sort();
 }
 
-void Graph::dfs_specificArticulation(Airport& airport, stack<Airport> *airport_stack, list<Airport> *res, int index, unordered_set<string> airlines) {
+void Graph::dfs_specificArticulation(Airport& airport, stack<Airport*>& airport_stack, list<Airport> *res, int index, unordered_set<string> airlines) {
     airport.visited = true;
     airport.low = index;
     airport.num = index;
     index++;
     airport.in_stack = true;
-    airport_stack->push(airport);
+    airport_stack.push(&airport);
 
     int count = 0;
     for (unordered_map<string, Flight>::iterator iter = airport.flights.begin(); iter != airport.flights.end(); iter++) {
         Flight& e = iter->second;
         string wTarget = e.target;
         Airport& w = airports[wTarget];
-        bool skip = false;
-        for(unordered_set<string>::iterator it = e.flight_airline.begin(); it != e.flight_airline.end(); it++){
-            if(airlines.find(*it) == airlines.end()) skip = true;
-        }
-        if(skip) continue;
 
-        if (!w.visited) {
-            count++;
-            dfs_articulation(w, airport_stack, res, index);
-            airport.low = min(airport.low, w.low);
-        }
-        else if (w.in_stack) {
-            airport.low = min(airport.low, w.num);
-        }
+        for(auto it = e.flight_airline.begin(); it != e.flight_airline.end(); it++){
+            if(airlines.find(*it) == airlines.end()) continue;
 
-        if (airport.num != 1 && !airport.is_articulation && w.low >= airport.num) {
-            res->push_back(airport);
-            airport.is_articulation = true;
-        }
-        else if (!airport.is_articulation && airport.num == 1 && count > 1) {
-            res->push_back(airport);
-            airport.is_articulation = true;
+            if (!w.visited) {
+                count++;
+                dfs_articulation(w, airport_stack, res, index);
+                airport.low = min(airport.low, w.low);
+            }
+            else if (w.in_stack) {
+                airport.low = min(airport.low, w.num);
+            }
+
+            if (airport.num != 1 && !airport.is_articulation && w.low >= airport.num) {
+                res->push_back(airport);
+                airport.is_articulation = true;
+            }
+            else if (!airport.is_articulation && airport.num == 1 && count > 1) {
+                res->push_back(airport);
+                airport.is_articulation = true;
+            }
         }
     }
-    //res->sort();
 }
 
 void Graph::bfs(string src, string target) {
@@ -354,7 +352,37 @@ void Graph::bfs_bycity(string city, string target, unordered_set<string> airline
     target_airport.flight_nr=flight_nr;
     target_airport.distance=distance;
 }
+void Graph::bfs_by_best_airline(string src, string target){
+    bfs(src, target);
+    Airport &target_airport = airports[target];
+    unordered_set<string> final;
+    cout << "1";
+    for(vector<string> &v : target_airport.path){
+        unordered_set<string> res;
+        cout << final.size() << " ";
+        for(int i = 1; i < v.size(); i++){
+           if(i==1) {
+               res = airports[src].flights[v[i]].flight_airline;
+           }
+           else{
+               unordered_set<string> temp_res;
+               for(unordered_set<string>::iterator it = res.begin(); it != res.end(); it++){
+                   if(airports[v[i-1]].flights[v[i]].flight_airline.find(*it) != airports[v[i-1]].flights[v[i]].flight_airline.end()){
+                        temp_res.insert(*it);
+                   }
+               }
+               if((final.size() > res.size()) || final.size() == 0)res = temp_res;
+           }
+        }
+    }
 
+    cout << "From " << src << "to " << target << "the minimal airlines to fly are: "<< final.size();
+    for(unordered_set<string>::iterator it = final.begin(); it != final.end(); it++){
+        if(it != final.begin()) cout << " -> ";
+        cout << *it;
+    }
+    cout << '\n';
+}
 void Graph::bfs_bycords(double latitude, double longitude, double distance, string target){
     double dist = -1.0;
     list<vector<string>> path;
@@ -408,20 +436,22 @@ void Graph::print_totalArticulationPoints() {
         airport.in_stack = false;
         airport.is_articulation = false;
     }
-    stack<Airport> airport_stack;
+    stack<Airport*> airport_stack;
     for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
         Airport& airport = iter->second;
-        if (!airport.visited)
-            dfs_articulation(airport, &airport_stack, &res, 1);
+        if (!airport.visited){
+            //cout << airport.code << "\n";
+            dfs_articulation(airport, airport_stack, &res, 1);
+        }
     }
 
     if(res.empty()){
         cout << "There are no articulation points!\n";
         return;
     }
-    cout << "The airticulation points are: \n";
+    cout << "The articulation points are: " << res.size() << "\n";
     for(Airport airport : res){
-        cout << airport.code << "\n";
+        //cout << airport.code << "\n";
     }
     //return answer;
 }
@@ -437,20 +467,20 @@ void Graph::print_specificArticulationPoints(unordered_set<string> airlines) {
         airport.in_stack = false;
         airport.is_articulation = false;
     }
-    stack<Airport> airport_stack;
+    stack<Airport*> airport_stack;
     for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
         Airport& airport = iter->second;
         if (!airport.visited)
-            dfs_specificArticulation(airport, &airport_stack, &res, 1, airlines);
+            dfs_specificArticulation(airport, airport_stack, &res, 1, airlines);
     }
 
     if(res.empty()){
         cout << "There are no articulation points!\n";
         return;
     }
-    cout << "The airticulation points are: ";
+    cout << "The articulation points are: " << res.size() << "\n";
     for(Airport airport : res){
-        cout << airport.code << "\n";
+        //cout << airport.code << "\n";
     }
     //return answer;
 }
@@ -610,11 +640,15 @@ void Graph::printAll(string src, string target, unordered_set<string> airlines){
 }
 
 string Graph::find_code(string name) {
-    if (airports.find(name)->second.code==name) return name;
+    if(airports.find(name) != airports.end()){
+        return name;
+    }
+    //if (airports.find(name)->second.code==name) return name;
+
     for (unMap::iterator iter=airports.begin(); iter!=airports.end();++iter) {
         if (iter->second.name==name) return iter->first;
     }
-    return name;
+    return "error";
 }
 
 void Graph::insertAirports() {
@@ -645,6 +679,7 @@ void Graph::insertAirports() {
 
 void Graph::insertFlights() {
     ifstream fout;
+    total_flights = 0;
     string file = "../flights.csv";
     fout.open(file);
     string temp, source, target, airline;
@@ -668,6 +703,7 @@ void Graph::insertFlights() {
             airports[source].flights.insert(pair<string, Flight>(target, flight));
             airports[source].flights[target].flight_airline.insert(airline);
         }
+        total_flights++;
     }
 }
 

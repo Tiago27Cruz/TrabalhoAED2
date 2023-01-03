@@ -68,8 +68,8 @@ public:
 
     void dfs(string src, int max);
     void dfs_normal(string src, int max);
-    void dfs_articulation(Airport& airport, stack<Airport>* node_stack, list<Airport>* res, int index);
-    void dfs_specificArticulation(Airport& airport, stack<Airport> *airport_stack, list<Airport> *res, int index, unordered_set<string> airlines);
+    void dfs_articulation(Airport& airport, stack<Airport*>& node_stack, list<Airport>* res, int index);
+    void dfs_specificArticulation(Airport& airport, stack<Airport*>& airport_stack, list<Airport> *res, int index, unordered_set<string> airlines);
 
     void AddBestPath(Airport& airport);
     double calculateDistance(double lat1, double lon1, double lat2, double lon2);
@@ -81,6 +81,7 @@ public:
     void bfs(string src, string target, unordered_set<string> airlines);
     void bfs_bycity(string city, string target);
     void bfs_bycity(string city, string target, unordered_set<string> airlines);
+    void bfs_by_best_airline(string src, string target);
     void bfs_bycords(double latitude, double longitude, double distance, string target);
     void bfs_bycords(double latitude, double longitude, double distance, string target, unordered_set<string> airlines);
 
