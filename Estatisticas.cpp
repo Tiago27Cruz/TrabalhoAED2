@@ -64,3 +64,6 @@ void Estatisticas::print_typeInCity(string city, string type) {
     else if(type == "flights")cout << "There are " << cities[city][1] << " flights coming from " << city << '\n';
     else cout << "Incorrect type! \n";
 }
+void Estatisticas::print_typeByAirline(string airline, string type){
+    if(type == "flights") cout << "There are " << airlines[airline][0] << " flights from airline " << airline << '\n';
+}

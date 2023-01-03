@@ -5,6 +5,7 @@
 #ifndef TRABALHOAED2_ESTATISTICAS_H
 #define TRABALHOAED2_ESTATISTICAS_H
 #include <unordered_map>
+#include <unordered_set>
 #include <string>
 #include <iostream>
 #include <vector>

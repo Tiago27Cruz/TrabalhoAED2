@@ -53,9 +53,11 @@ void Graph::dfs(string src, int max) {
         Flight& e = iter->second;
         string wTarget = e.target;
         Airport& w = airports[wTarget];
-        /*if(different_airlines.find(e.source) == different_airlines.end()){
-            different_airlines.insert(e.source);
-        }*/
+        for(unordered_set<string>::iterator it = e.flight_airline.begin(); it != e.flight_airline.end(); it++){
+            if(different_airlines.find(*it) == different_airlines.end()){
+                different_airlines.insert(*it);
+            }
+        }
         total_flights++;
         if (!w.visited) {
             if (different_countries.find(w.country) == different_countries.end()) {
@@ -189,6 +191,7 @@ void Graph::bfs(string src, string target, unordered_set<string> airlines) {
     AddBestPath(airport);
     airport.visited = true;
     q.push(&airport);
+    bool airline_check = false;
 
     while (!q.empty()) {
         Airport u = *q.front();
@@ -197,11 +200,12 @@ void Graph::bfs(string src, string target, unordered_set<string> airlines) {
             break;
         for (unordered_map<string, Flight>::iterator iter = u.flights.begin(); iter != u.flights.end(); iter++) {
             Flight& e = iter->second;
+            for(unordered_set<string>::iterator it = airlines.begin(); it != airlines.end(); it++){
+                if(e.flight_airline.find(*it) != e.flight_airline.end()) airline_check = true;
+            }
+            if(!airline_check) continue;
             string wTarget = e.target;
             Airport &w = airports[wTarget];
-            /*if(airlines.find(e.airline) == airlines.end()){
-                continue;
-            }*/
             double distance = calculateDistance(u.latitude, u.longitude, w.latitude, w.longitude) + u.distance;
             int flight_nr = u.flight_nr + 1;
             if (w.flight_nr >= flight_nr || w.flight_nr <= 0) {
@@ -408,6 +412,10 @@ void Graph::print_typeInCity(string City, string type) {
         print_typeInCity(City, "flights");
     }
     else stats.print_typeInCity(City, type);
+}
+
+void Graph::print_typeByAirline(string airline, string type) {
+    stats.print_typeByAirline(airline, type);
 }
 
 void Graph::print_bestDistance(Airport airport) {

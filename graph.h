@@ -93,6 +93,7 @@ public:
 
     void print_typeInCountry(string Country, string type);
     void print_typeInCity(string City, string type);
+    void print_typeByAirline(string airline, string type);
 
     void print_bestDistance(Airport airport);
     void print_bestDistance(string src, string target);

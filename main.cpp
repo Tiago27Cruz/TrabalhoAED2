@@ -25,11 +25,12 @@ int main() {
     graph.insertAirline();
     graph.insertFlights();
     cout << "begin" << '\n';
-    graph.print_bestPath("CDG", "MAG");
-    graph.print_typeInCountry("United States", "all");
-    graph.print_typeInCity("Paris", "all");
+    //graph.print_bestPath("CDG", "MAG");
+    //graph.print_typeInCountry("United States", "all");
+    //graph.print_typeInCity("Paris", "all");
+    //graph.print_typeByAirline("MLA", "flights");
     //graph.print_totalArticulationPoints();
-    //graph.print_all_airport_information_in_range("CDG", 1);
+    graph.print_all_airport_information_in_range("CDG", 1);
     //graph.printAll("CDG", "MAG");
 
     /*
