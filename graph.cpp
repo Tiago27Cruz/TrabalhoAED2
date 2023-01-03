@@ -119,6 +119,46 @@ void Graph::dfs_articulation(Airport& airport, stack<Airport> *airport_stack, li
     //res->sort();
 }
 
+void Graph::dfs_specificArticulation(Airport& airport, stack<Airport> *airport_stack, list<Airport> *res, int index, unordered_set<string> airlines) {
+    airport.visited = true;
+    airport.low = index;
+    airport.num = index;
+    index++;
+    airport.in_stack = true;
+    airport_stack->push(airport);
+
+    int count = 0;
+    for (unordered_map<string, Flight>::iterator iter = airport.flights.begin(); iter != airport.flights.end(); iter++) {
+        Flight& e = iter->second;
+        string wTarget = e.target;
+        Airport& w = airports[wTarget];
+        bool skip = false;
+        for(unordered_set<string>::iterator it = e.flight_airline.begin(); it != e.flight_airline.end(); it++){
+            if(airlines.find(*it) == airlines.end()) skip = true;
+        }
+        if(skip) continue;
+
+        if (!w.visited) {
+            count++;
+            dfs_articulation(w, airport_stack, res, index);
+            airport.low = min(airport.low, w.low);
+        }
+        else if (w.in_stack) {
+            airport.low = min(airport.low, w.num);
+        }
+
+        if (airport.num != 1 && !airport.is_articulation && w.low >= airport.num) {
+            res->push_back(airport);
+            airport.is_articulation = true;
+        }
+        else if (!airport.is_articulation && airport.num == 1 && count > 1) {
+            res->push_back(airport);
+            airport.is_articulation = true;
+        }
+    }
+    //res->sort();
+}
+
 void Graph::bfs(string src, string target) {
     for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
         Airport& airport = iter->second;
@@ -380,6 +420,35 @@ void Graph::print_totalArticulationPoints() {
         return;
     }
     cout << "The airticulation points are: \n";
+    for(Airport airport : res){
+        cout << airport.code << "\n";
+    }
+    //return answer;
+}
+
+void Graph::print_specificArticulationPoints(unordered_set<string> airlines) {
+    list<Airport> res;
+    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
+        Airport& airport = iter->second;
+        airport.visited=false;
+        airport.distance=-1.0;
+        airport.flight_nr=-1;
+        airport.path.clear();
+        airport.in_stack = false;
+        airport.is_articulation = false;
+    }
+    stack<Airport> airport_stack;
+    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
+        Airport& airport = iter->second;
+        if (!airport.visited)
+            dfs_specificArticulation(airport, &airport_stack, &res, 1, airlines);
+    }
+
+    if(res.empty()){
+        cout << "There are no articulation points!\n";
+        return;
+    }
+    cout << "The airticulation points are: ";
     for(Airport airport : res){
         cout << airport.code << "\n";
     }

@@ -25,6 +25,16 @@ int main() {
     graph.insertAirline();
     graph.insertFlights();
     cout << "begin" << '\n';
+    unordered_set<string> airlines;
+    airlines.insert("ACP");
+    airlines.insert("AAW");
+    airlines.insert("BON");
+    airlines.insert("ABY");
+    airlines.insert("ABY");
+    airlines.insert("ABY");
+    graph.print_specificArticulationPoints(airlines);
+    cout << "--------\n\n\n";
+    graph.print_totalArticulationPoints();
     //graph.print_bestPath("CDG", "MAG");
     //graph.print_typeInCountry("United States", "all");
     //graph.print_typeInCity("Paris", "all");
