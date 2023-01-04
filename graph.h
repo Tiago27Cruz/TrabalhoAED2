@@ -22,6 +22,7 @@ class Graph {
         string name;
         string callsign;
         string country;
+        int starting_airport = 0;
     };
     struct Flight{
         string source;
@@ -41,6 +42,7 @@ class Graph {
         int flight_nr;
         list<vector<string>> path;
         unordered_map<string, Flight> flights;
+        unordered
         bool visited;
         bool in_stack;
         bool is_articulation;
@@ -65,6 +67,7 @@ public:
     vector<Airport> best_flight(string src, string target);
     void addFlight(string src, string target, string airline);
     unMap get_airports() {return airports;};
+    unAir get_airlines() {return airlines;};
 
     void dfs(string src, int max);
     void dfs_normal(string src, int max);
@@ -102,10 +105,14 @@ public:
     void print_bestDistance(string src, string target);
     void print_bestPath(Airport airport);
     void print_bestPath(string src, string target);
+    void print_bestPath(string src, string target, unordered_set<string> airlines);
     void print_bestCityPath(string src, string target);
+    void print_bestCityPath(string src, string target, unordered_set<string> airlines);
     void print_bestCordPath(double latitude, double longitude, double distance, string target);
+    void print_bestCordPath(double latitude, double longitude, double distance, string target, unordered_set<string> airlines);
     void print_flightnr(Airport airport);
     void print_bestflightnr(string src, string target);
+    void print_bestflightnr(string src, string target, unordered_set<string> airlines);
     void print_all_flights(string src);
     void print_all_different_airlines(string src);
     void print_all_different_destinies(string src);
@@ -117,6 +124,8 @@ public:
     void printAll(string src, string target, unordered_set<string> airlines);
 
     string find_code(string name);
+    bool isValidCity(string city);
+    bool isValidCountry(string country);
 };
 
 #endif //TRABALHO_AED2_GRAPH_H

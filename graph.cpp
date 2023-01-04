@@ -355,33 +355,14 @@ void Graph::bfs_bycity(string city, string target, unordered_set<string> airline
 void Graph::bfs_by_best_airline(string src, string target){
     bfs(src, target);
     Airport &target_airport = airports[target];
-    unordered_set<string> final;
-    cout << "1";
     for(vector<string> &v : target_airport.path){
-        unordered_set<string> res;
-        cout << final.size() << " ";
+        vector<string> temp_res;
         for(int i = 1; i < v.size(); i++){
-           if(i==1) {
-               res = airports[src].flights[v[i]].flight_airline;
-           }
-           else{
-               unordered_set<string> temp_res;
-               for(unordered_set<string>::iterator it = res.begin(); it != res.end(); it++){
-                   if(airports[v[i-1]].flights[v[i]].flight_airline.find(*it) != airports[v[i-1]].flights[v[i]].flight_airline.end()){
-                        temp_res.insert(*it);
-                   }
-               }
-               if((final.size() > res.size()) || final.size() == 0)res = temp_res;
-           }
+            if(i == 0){
+                for()
+            }
         }
     }
-
-    cout << "From " << src << "to " << target << "the minimal airlines to fly are: "<< final.size();
-    for(unordered_set<string>::iterator it = final.begin(); it != final.end(); it++){
-        if(it != final.begin()) cout << " -> ";
-        cout << *it;
-    }
-    cout << '\n';
 }
 void Graph::bfs_bycords(double latitude, double longitude, double distance, string target){
     double dist = -1.0;
@@ -548,9 +529,19 @@ void Graph::print_bestPath(string src, string target){
     Airport &airport = airports[target];
     print_bestPath(airport);
 }
+void Graph::print_bestPath(string src, string target, unordered_set<string> airlines){
+    bfs(src, target, airlines);
+    Airport &airport = airports[target];
+    print_bestPath(airport);
+}
 
 void Graph::print_bestCityPath(string src, string target){
     bfs_bycity(src, target);
+    Airport &airport = airports[target];
+    print_bestPath(airport);
+}
+void Graph::print_bestCityPath(string src, string target, unordered_set<string> airlines){
+    bfs_bycity(src, target, airlines);
     Airport &airport = airports[target];
     print_bestPath(airport);
 }
@@ -566,12 +557,28 @@ void Graph::print_bestCordPath(double latitude, double longitude, double distanc
     }
 }
 
+void Graph::print_bestCordPath(double latitude, double longitude, double distance, string target, unordered_set<string> airlines){
+    //bfs_bycords(latitude, longitude, distance, target, airlines);
+    Airport &airport = airports[target];
+    if(airport.flight_nr != -1) {
+        print_bestPath(airport);
+        print_bestDistance(airport);
+    } else{
+        cout << "no flight found";
+    }
+}
+
 void Graph::print_flightnr(Airport airport){
     cout << "The Bestpath flight number is : " << airport.flight_nr << '\n';
 }
 
 void Graph::print_bestflightnr(string src, string target){
     bfs(src, target);
+    Airport &airport = airports[target];
+    print_flightnr(airport);
+}
+void Graph::print_bestflightnr(string src, string target, unordered_set<string> airlines){
+    bfs(src, target, airlines);
     Airport &airport = airports[target];
     print_flightnr(airport);
 }
@@ -707,25 +714,33 @@ void Graph::insertFlights() {
     }
 }
 
-    void Graph::insertAirline() {
-        ifstream fout;
-        string file = "../airlines.csv";
-        fout.open(file);
-        string temp, code, name, callsign, country;
-        getline(fout, temp);
-        while (getline(fout, temp)) {
-            stringstream itStream(temp);
-            getline(itStream, code, ',');
-            getline(itStream, name, ',');
-            getline(itStream, callsign, ',');
-            getline(itStream, country, '\r');
+void Graph::insertAirline() {
+    ifstream fout;
+    string file = "../airlines.csv";
+    fout.open(file);
+    string temp, code, name, callsign, country;
+    getline(fout, temp);
+    while (getline(fout, temp)) {
+        stringstream itStream(temp);
+        getline(itStream, code, ',');
+        getline(itStream, name, ',');
+        getline(itStream, callsign, ',');
+        getline(itStream, country, '\r');
 
-            Airline airline;
-            airline.code = code;
-            airline.name = name;
-            airline.callsign = callsign;
-            airline.country = country;
-            airlines.insert(pair<string, Airline>(code, airline));
-            stats.addCountry(country, "airlines");
-        }
+        Airline airline;
+        airline.code = code;
+        airline.name = name;
+        airline.callsign = callsign;
+        airline.country = country;
+        airlines.insert(pair<string, Airline>(code, airline));
+        stats.addCountry(country, "airlines");
     }
+}
+
+bool Graph::isValidCity(string city){
+    return stats.isValidCity(city);
+}
+
+bool Graph::isValidCountry(string country){
+    return stats.isValidCountry(country);
+}

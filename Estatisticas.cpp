@@ -53,6 +53,22 @@ void Estatisticas::addAirline(string airline, string type) {
     }
 }
 
+void Estatisticas::addAirlineCountry(string airline, string country){
+    if(airlineCountry.find(airline) == airlineCountry.end()){
+        airlineCountries.insert(country);
+        airlineCountry.insert(pair<string, unordered_set<string>>(airline, airlineCountries));
+    } else{
+        airlineCountry[airline]
+    }
+}
+
+bool Estatisticas::isValidCity(string city) {
+    return (cities.find(city) == cities.end());
+}
+
+bool Estatisticas::isValidCountry(std::string country) {
+    return (countries.find(country) == countries.end());
+}
 void Estatisticas::print_typeInCountry(string country, string type) {
     if(type == "airport")cout << "There are " << countries[country][0] << " airports in " << country << '\n';
     else if(type == "flights")cout << "There are " << countries[country][1] << " flights coming from " << country << '\n';
