@@ -22,7 +22,6 @@ class Graph {
         string name;
         string callsign;
         string country;
-        int starting_airport = 0;
     };
     struct Flight{
         string source;
@@ -47,6 +46,9 @@ class Graph {
         bool is_articulation;
         int num;
         int low;
+        int parent;
+        int children;
+        int idx;
     };
     typedef unordered_map<string, Airport> unMap;
     typedef unordered_map<string, Airline> unAir;
@@ -71,7 +73,7 @@ public:
     void dfs(string src, int max);
     void dfs_by_best_airline(string src, string target, string origin, vector<string> res, unordered_set<string> temp);
     void dfs_normal(string src, int max);
-    void dfs_articulation(Airport& airport, stack<Airport*>& node_stack, list<Airport>* res, int index);
+    void dfs_articulation(Airport& airport, stack<Airport*>& node_stack, list<Airport>* res, int& index, int parent);
     void dfs_specificArticulation(Airport& airport, stack<Airport*>& airport_stack, list<Airport> *res, int index, unordered_set<string> airlines);
 
     void AddBestPath(Airport& airport);

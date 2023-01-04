@@ -78,11 +78,11 @@ void Estatisticas::addAirlineAirport(std::string airline, std::string airport) {
 }
 
 bool Estatisticas::isValidCity(string city) {
-    return (cities.find(city) == cities.end());
+    return (cities.find(city) != cities.end());
 }
 
 bool Estatisticas::isValidCountry(std::string country) {
-    return (countries.find(country) == countries.end());
+    return (countries.find(country) != countries.end());
 }
 void Estatisticas::print_typeInCountry(string country, string type) {
     if(type == "airport")cout << "There are " << countries[country][0] << " airports in " << country << '\n';

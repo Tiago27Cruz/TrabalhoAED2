@@ -43,39 +43,112 @@ void searchMenu(Graph *graph){
                 open = false;
                 break;
             case 1: {
-                cout << "Do you wish to specify airlines?\n"
-                        "1 -> Yes\n"
-                        "2 -> No\n"
+                cout << "What do you prefer?\n"
+                        "1 -> Minimum number of flights\n"
+                        "2 -> Minimum number of airlines\n"
                         "0 -> Go Back\n";
                 while (!(cin >> in)) {
                     cin.clear();
                     cin.ignore(INT_MAX, '\n');
                     cout << "Invalid input!\n";
-                    cout << "Do you wish to specify airlines?\n"
-                            "1 -> Yes\n"
-                            "2 -> No\n"
+                    cout << "What do you prefer?\n"
+                            "1 -> Minimum number of flights\n"
+                            "2 -> Minimum number of airlines\n"
                             "0 -> Go Back\n";
                 }
-                switch (in) {
-                    case 0:
-                        break;
-                    case 1:
-                        airline = "";
-                        cout << "Please insert the specified airlines and write done when done!\n";
-                        while (airline != "done") {
+                switch(in){
+                    case 0: break;
+                    case 1: {
+                        cout << "Do you wish to specify airlines?\n"
+                                "1 -> Yes\n"
+                                "2 -> No\n"
+                                "0 -> Go Back\n";
+                        while (!(cin >> in)) {
                             cin.clear();
                             cin.ignore(INT_MAX, '\n');
-                            cin >> airline;
-                            if (airline == "done") break;
-                            else if (is_validAirline(*graph, airline)) {
-                                airlines.insert(airline);
-                                cout
-                                        << "Airline inserted! Please insert another airline or write done if you're finished!\n";
-                            } else {
-                                cout << "Please insert a valid airline!\n";
-                            }
+                            cout << "Invalid input!\n";
+                            cout << "Do you wish to specify airlines?\n"
+                                    "1 -> Yes\n"
+                                    "2 -> No\n"
+                                    "0 -> Go Back\n";
                         }
+                        switch (in) {
+                            case 0:
+                                break;
+                            case 1:
+                                airline = "";
+                                cout << "Please insert the specified airlines and write done when done!\n";
+                                while (airline != "done") {
+                                    cin.clear();
+                                    cin.ignore(INT_MAX, '\n');
+                                    cin >> airline;
+                                    if (airline == "done") break;
+                                    else if (is_validAirline(*graph, airline)) {
+                                        airlines.insert(airline);
+                                        cout
+                                                << "Airline inserted! Please insert another airline or write done if you're finished!\n";
+                                    } else {
+                                        cout << "Please insert a valid airline!\n";
+                                    }
+                                }
 
+                                cout << "Please enter the airport of your departure or write back to go back\n";
+                                cin.clear();
+                                cin.ignore(INT_MAX, '\n');
+                                cin >> src;
+                                while (!is_valid(*graph, src) && src != "back") {
+                                    cout << "Please enter a valid code/name!\n";
+                                    cin.clear();
+                                    cin.ignore(INT_MAX, '\n');
+                                    cin >> src;
+                                }
+                                if (src == "back") { break; }
+                                cout << "Please enter the airport of your destination or write back to go back\n";
+                                cin.clear();
+                                cin.ignore(INT_MAX, '\n');
+                                cin >> target;
+                                while (!is_valid(*graph, target) && target != "back") {
+                                    cout << "Please enter a valid code/name!\n";
+                                    cin.clear();
+                                    cin.ignore(INT_MAX, '\n');
+                                    cin >> target;
+                                }
+                                if (target == "back") { break; }
+
+                                graph->print_bestPath(graph->find_code(src), graph->find_code(target), airlines);
+                                break;
+                            case 2:
+                                cout << "Please enter the airport of your departure or write back to go back\n";
+                                cin.clear();
+                                cin.ignore(INT_MAX, '\n');
+                                cin >> src;
+                                while (!is_valid(*graph, src) && src != "back") {
+                                    cout << "Please enter a valid code/name!\n";
+                                    cin.clear();
+                                    cin.ignore(INT_MAX, '\n');
+                                    cin >> src;
+                                }
+                                if (src == "back") { break; }
+                                cout << "Please enter the airport of your destination or write back to go back\n";
+                                cin.clear();
+                                cin.ignore(INT_MAX, '\n');
+                                cin >> target;
+                                while (!is_valid(*graph, target) && target != "back") {
+                                    cout << "Please enter a valid code/name!\n";
+                                    cin.clear();
+                                    cin.ignore(INT_MAX, '\n');
+                                    cin >> target;
+                                }
+                                if (src == "back") { break; }
+                                graph->print_bestPath(graph->find_code(src), graph->find_code(target));
+                                break;
+                            default:
+                                cout << "Invalid input!\n";
+                                break;
+                        }
+                        break;
+                    }
+                    case 2:{
                         cout << "Please enter the airport of your departure or write back to go back\n";
                         cin.clear();
                         cin.ignore(INT_MAX, '\n');
@@ -97,39 +170,14 @@ void searchMenu(Graph *graph){
                             cin.ignore(INT_MAX, '\n');
                             cin >> target;
                         }
-                        if (src == "back") { break; }
-
-                        graph->print_bestPath(graph->find_code(src), graph->find_code(target), airlines);
-                        break;
-                    case 2:
-                        cout << "Please enter the airport of your departure or write back to go back\n";
-                        cin.clear();
-                        cin.ignore(INT_MAX, '\n');
-                        cin >> src;
-                        while (!is_valid(*graph, src) && src != "back") {
-                            cout << "Please enter a valid code/name!\n";
-                            cin.clear();
-                            cin.ignore(INT_MAX, '\n');
-                            cin >> src;
-                        }
-                        if (src == "back") { break; }
-                        cout << "Please enter the airport of your destination or write back to go back\n";
-                        cin.clear();
-                        cin.ignore(INT_MAX, '\n');
-                        cin >> target;
-                        while (!is_valid(*graph, target) && target != "back") {
-                            cout << "Please enter a valid code/name!\n";
-                            cin.clear();
-                            cin.ignore(INT_MAX, '\n');
-                            cin >> target;
-                        }
-                        if (src == "back") { break; }
-                        graph->print_bestPath(graph->find_code(src), graph->find_code(target));
-                        break;
+                        if (target == "back") { break; }
+                        graph->dfs_minimum_airlines(src, target);
+                        break;}
                     default:
                         cout << "Invalid input!\n";
                         break;
                 }
+                break;
             }
             case 2: {
                 cout << "Do you wish to specify airlines?\n"
@@ -219,6 +267,7 @@ void searchMenu(Graph *graph){
                         cout << "Invalid Input!\n";
                         break;
                 }
+                break;
             }
             case 3: {
                 cout << "Do you wish to specify airlines?\n"
@@ -306,6 +355,7 @@ void searchMenu(Graph *graph){
                         cout << "Invalid input!\n";
                         break;
                     }
+                    break;
             }
             default:
                 cout << "Invalid input!\n";
@@ -506,20 +556,20 @@ int main() {
     graph.insertAirports();
     graph.insertAirline();
     graph.insertFlights();
-    graph.dfs_minimum_airlines("POM", "MAG");
+    graph.dfs_minimum_airlines("CDG", "MAG");
     //graph.bfs_by_best_airline("CDG", "MAG");
     cout << "begin" << '\n';
     //unordered_set<string> airlines;
     //airlines.insert("ANG");
 
     //graph.print_specificArticulationPoints(airlines);
-    //graph.print_totalArticulationPoints();
-    graph.print_bestPath("CDG", "MAG");
+    graph.print_totalArticulationPoints();
+    //graph.print_bestPath("MAG", "CDG");
     //graph.print_typeInCountry("United States", "all");
     //graph.print_typeInCity("Paris", "all");
     //graph.print_typeByAirline("MLA", "flights");
     //graph.print_totalArticulationPoints();
-    graph.print_all_airport_information_in_range("CDG", 1);
+    //graph.print_all_airport_information_in_range("CDG", 1);
     //graph.printAll("CDG", "MAG");
 
     bool open = true;
@@ -555,49 +605,6 @@ int main() {
 
 
     }
-
-/*
-        while (mode=="info") {
-            cout << "Please enter the airport\n";
-            getline(cin, in);
-            while (!is_valid(graph, in) && in!="back") {
-                cout << "Please enter a valid code/name!\n";
-                getline(cin, in);
-            }
-            if (in=="back") {stk.push(in); continue;}
-            graph.print_all_airport_information(graph.find_code(in));
-        }
-        while (mode=="back") {
-            stk.pop();
-            stk.pop();
-            break;
-        }
-        else {
-        cout << "Please enter a valid input!\n";
-        stk.pop();
-        }
-    }
-
-    string s = " ";
-    cout << "begin" << '\n';
-    while(s != "back") {
-        cin >> s;
-        if (s == "all") {
-            graph.print_bestCordPath(49.012779, 2.550000, 50, "MAG");
-            //graph.printAll_bycity("Paris", "JFK");
-        }
-        if(s == "airline"){
-            unordered_set<string> airlines;
-            graph.printAll("CDG", "MAG");
-            cin >> s;
-            airlines.insert("AAL");
-            airlines.insert("MPP");
-            graph.printAll("CDG", "MAG", airlines);
-        }
-        if(s == "flights"){
-            graph.print_all_airport_information("CDG");
-        }
-    }*/
     //graph.printAll_bycity("Paris", "JFK");
     //graph.print_by_cords(49.012779, 2.550000, 25, "JFK");
     //graph.printAll("ORY", "JFK");
