@@ -42,7 +42,6 @@ class Graph {
         int flight_nr;
         list<vector<string>> path;
         unordered_map<string, Flight> flights;
-        unordered
         bool visited;
         bool in_stack;
         bool is_articulation;
@@ -70,6 +69,7 @@ public:
     unAir get_airlines() {return airlines;};
 
     void dfs(string src, int max);
+    void dfs_by_best_airline(string src, string target, string origin, vector<string> res, unordered_set<string> temp);
     void dfs_normal(string src, int max);
     void dfs_articulation(Airport& airport, stack<Airport*>& node_stack, list<Airport>* res, int index);
     void dfs_specificArticulation(Airport& airport, stack<Airport*>& airport_stack, list<Airport> *res, int index, unordered_set<string> airlines);
@@ -84,7 +84,7 @@ public:
     void bfs(string src, string target, unordered_set<string> airlines);
     void bfs_bycity(string city, string target);
     void bfs_bycity(string city, string target, unordered_set<string> airlines);
-    void bfs_by_best_airline(string src, string target);
+    void dfs_minimum_airlines(string src, string target);
     void bfs_bycords(double latitude, double longitude, double distance, string target);
     void bfs_bycords(double latitude, double longitude, double distance, string target, unordered_set<string> airlines);
 
@@ -100,6 +100,8 @@ public:
     void print_typeInCountry(string Country, string type);
     void print_typeInCity(string City, string type);
     void print_typeByAirline(string airline, string type);
+    void print_nCountriesAirline(string airline);
+    void print_nAirportsAirline(string airline);
 
     void print_bestDistance(Airport airport);
     void print_bestDistance(string src, string target);

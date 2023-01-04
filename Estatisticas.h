@@ -16,13 +16,14 @@ class Estatisticas {
     unordered_map<string, vector<int>> countries;
     unordered_map<string, vector<int>> cities;
     unordered_map<string, vector<int>> airlines;
-    unordered_set<string> airlineCountries;
     unordered_map<string, unordered_set<string>> airlineCountry;
+    unordered_map<string, unordered_set<string>> airlineAirports;
 public:
     void addCountry(string country, string type);
     void addCity(string city, string type);
     void addAirline(string airline, string type);
     void addAirlineCountry(string airline, string country);
+    void addAirlineAirport(string airline, string airport);
 
     bool isValidCity(string city);
     bool isValidCountry(string country);
@@ -30,6 +31,8 @@ public:
     void print_typeInCountry(string country, string type);
     void print_typeInCity(string city, string type);
     void print_typeByAirline(string airline, string type);
+    void print_nCountriesAirline(string airline);
+    void print_nAirportsAirline(string airline);
 };
 
 

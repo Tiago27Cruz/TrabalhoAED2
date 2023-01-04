@@ -55,10 +55,25 @@ void Estatisticas::addAirline(string airline, string type) {
 
 void Estatisticas::addAirlineCountry(string airline, string country){
     if(airlineCountry.find(airline) == airlineCountry.end()){
-        airlineCountries.insert(country);
-        airlineCountry.insert(pair<string, unordered_set<string>>(airline, airlineCountries));
+        unordered_set<string> temp;
+        temp.insert(country);
+        airlineCountry.insert(pair<string, unordered_set<string>>(airline, temp));
     } else{
-        airlineCountry[airline]
+        unordered_set<string> temp = airlineCountry[airline];
+        temp.insert(country);
+        airlineCountry[airline] = temp;
+    }
+}
+
+void Estatisticas::addAirlineAirport(std::string airline, std::string airport) {
+    if(airlineCountry.find(airline) == airlineCountry.end()){
+        unordered_set<string> temp;
+        temp.insert(airport);
+        airlineCountry.insert(pair<string, unordered_set<string>>(airline, temp));
+    } else{
+        unordered_set<string> temp = airlineCountry[airline];
+        temp.insert(airport);
+        airlineCountry[airline] = temp;
     }
 }
 
@@ -82,4 +97,12 @@ void Estatisticas::print_typeInCity(string city, string type) {
 }
 void Estatisticas::print_typeByAirline(string airline, string type){
     if(type == "flights") cout << "There are " << airlines[airline][0] << " flights from airline " << airline << '\n';
+}
+
+void Estatisticas::print_nCountriesAirline(string airline) {
+    cout << airline << " is active in " << airlineCountry[airline].size() << " countries\n";
+}
+
+void Estatisticas::print_nAirportsAirline(std::string airline) {
+    cout << airline << " is active in " << airlineAirports[airline].size() << " countries\n";
 }

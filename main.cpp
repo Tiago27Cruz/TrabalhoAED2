@@ -235,7 +235,6 @@ void searchMenu(Graph *graph){
                             "0 -> Go Back\n";
                 }
 
-                switch(in){
                     if(in == 0)
                         break;
                     else if(in == 1) {
@@ -307,7 +306,6 @@ void searchMenu(Graph *graph){
                         cout << "Invalid input!\n";
                         break;
                     }
-                }
             }
             default:
                 cout << "Invalid input!\n";
@@ -464,25 +462,31 @@ void infoMenu(Graph graph){
                 if (str == "back") break;
 
                 cout << "What do you wish to know?\n"
-                        "1 -> Number of flights\n"
+                        "1 -> Number of countries\n"
+                        "2 -> Number of flights\n"
+                        "3 -> Number of airports\n"
                         "0 -> Go Back\n";
                 while (!(cin >> in)) {
                     cin.clear();
                     cin.ignore(INT_MAX, '\n');
                     cout << "Invalid input!\n";
                     cout << "What do you wish to know?\n"
-                            "1 -> Number of airports\n"
+                            "1 -> Number of countries\n"
                             "2 -> Number of flights\n"
+                            "3 -> Number of airports\n"
                             "0 -> Go Back\n";
                 }
                 switch (in) {
                     case 0:
                         break;
                     case 1:
-                        graph.print_typeInCity(str, "airport");
+                        graph.print_nCountriesAirline(str);
                         break;
                     case 2:
-                        graph.print_typeInCity(str, "flights");
+                        graph.print_typeByAirline(str, "flights");
+                        break;
+                    case 3:
+                        graph.print_nAirportsAirline(str);
                         break;
                     default:
                         cout << "Invalid input\n";
@@ -490,6 +494,9 @@ void infoMenu(Graph graph){
                 }
                 break;
             }
+            default:
+                cout << "Invalid input\n";
+                break;
         }
     }
 }
@@ -499,6 +506,7 @@ int main() {
     graph.insertAirports();
     graph.insertAirline();
     graph.insertFlights();
+    graph.dfs_minimum_airlines("POM", "MAG");
     //graph.bfs_by_best_airline("CDG", "MAG");
     cout << "begin" << '\n';
     //unordered_set<string> airlines;

@@ -71,6 +71,45 @@ void Graph::dfs(string src, int max) {
         }
     }
 }
+void Graph::dfs_by_best_airline(string src, string target, string origin, vector<string> res, unordered_set<string> temp){
+    Airport &airport = airports[src];
+    if(src == target){
+        res.push_back(*temp.begin());
+        if(airport.path.empty()){
+            airport.path.push_back(res);
+        }
+        else if(airport.path.front().size() > res.size()){
+            airport.path.front() = res;
+        }
+    }
+    else if(airport.flights.size() != 0){
+        unordered_set<string> super_temp;
+        for (unordered_map<string, Flight>::iterator iter = airport.flights.begin();
+             iter != airport.flights.end(); iter++) {
+            Flight &e = iter->second;
+            string wTarget = e.target;
+            Airport &w = airports[wTarget];
+            if (origin == src) {
+                temp = e.flight_airline;
+            } else {
+                bool change_airline = true;
+                for (unordered_set<string>::iterator it = temp.begin(); it != temp.end(); it++) {
+                    if (e.flight_airline.find(*it) != temp.end()) {
+                        change_airline = false;
+                        super_temp.insert(*it);
+                    }
+                }
+                if (change_airline) {
+                    res.push_back(*temp.begin());
+                    temp = e.flight_airline;
+                } else {
+                    temp = super_temp;
+                }
+            }
+            dfs_by_best_airline(wTarget, target, origin, res, temp);
+        }
+    }
+}
 
 void Graph::dfs_normal(string src, int max){
     for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
@@ -352,17 +391,13 @@ void Graph::bfs_bycity(string city, string target, unordered_set<string> airline
     target_airport.flight_nr=flight_nr;
     target_airport.distance=distance;
 }
-void Graph::bfs_by_best_airline(string src, string target){
-    bfs(src, target);
+void Graph::dfs_minimum_airlines(string src, string target){
+    unordered_set<string> temp;
     Airport &target_airport = airports[target];
-    for(vector<string> &v : target_airport.path){
-        vector<string> temp_res;
-        for(int i = 1; i < v.size(); i++){
-            if(i == 0){
-                for()
-            }
-        }
-    }
+    target_airport.path.clear();
+    vector<string> res;
+    dfs_by_best_airline(src, target, src, res, temp);
+    print_bestPath(target_airport);
 }
 void Graph::bfs_bycords(double latitude, double longitude, double distance, string target){
     double dist = -1.0;
@@ -496,6 +531,14 @@ void Graph::print_typeInCity(string City, string type) {
 
 void Graph::print_typeByAirline(string airline, string type) {
     stats.print_typeByAirline(airline, type);
+}
+
+void Graph::print_nCountriesAirline(string airline) {
+    stats.print_nCountriesAirline(airline);
+}
+
+void Graph::print_nAirportsAirline(std::string airline) {
+    stats.print_nAirportsAirline(airline);
 }
 
 void Graph::print_bestDistance(Airport airport) {
@@ -660,7 +703,7 @@ string Graph::find_code(string name) {
 
 void Graph::insertAirports() {
     ifstream fout;
-    string file = "../airports.csv";
+    string file = "../tempAirport.csv";
     fout.open(file);
     string temp, Code, Name, City, Country, tempLatitude, tempLongitude;
     getline(fout, temp);
@@ -687,7 +730,7 @@ void Graph::insertAirports() {
 void Graph::insertFlights() {
     ifstream fout;
     total_flights = 0;
-    string file = "../flights.csv";
+    string file = "../tempFlight.csv";
     fout.open(file);
     string temp, source, target, airline;
     getline(fout, temp);
