@@ -89,6 +89,7 @@ public:
     void dfs_minimum_airlines(string src, string target);
     void bfs_bycords(double latitude, double longitude, double distance, string target);
     void bfs_bycords(double latitude, double longitude, double distance, string target, unordered_set<string> airlines);
+    void bfs_Diametro(Airport& airport);
 
 
 
@@ -104,6 +105,8 @@ public:
     void print_typeByAirline(string airline, string type);
     void print_nCountriesAirline(string airline);
     void print_nAirportsAirline(string airline);
+
+    void print_graphDiametro();
 
     void print_bestDistance(Airport airport);
     void print_bestDistance(string src, string target);

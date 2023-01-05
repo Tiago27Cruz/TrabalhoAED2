@@ -556,14 +556,15 @@ int main() {
     graph.insertAirports();
     graph.insertAirline();
     graph.insertFlights();
-    graph.dfs_minimum_airlines("CDG", "MAG");
+    //graph.dfs_minimum_airlines("CDG", "MAG");
     //graph.bfs_by_best_airline("CDG", "MAG");
     cout << "begin" << '\n';
     //unordered_set<string> airlines;
     //airlines.insert("ANG");
+    graph.print_graphDiametro();
 
     //graph.print_specificArticulationPoints(airlines);
-    graph.print_totalArticulationPoints();
+    //graph.print_totalArticulationPoints();
     //graph.print_bestPath("MAG", "CDG");
     //graph.print_typeInCountry("United States", "all");
     //graph.print_typeInCity("Paris", "all");

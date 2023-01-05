@@ -360,6 +360,61 @@ void Graph::bfs_bycity(string city, string target, unordered_set<string> airline
     target_airport.flight_nr=flight_nr;
     target_airport.distance=distance;
 }
+
+void Graph::bfs_Diametro(Airport& airport) {
+    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
+        Airport& ap = iter->second;
+        ap.visited=false;
+        ap.distance=-1.0;
+    }
+    queue<Airport*> q; // queue of unvisited nodes
+
+    airport.distance=0.0;
+    airport.flight_nr=0;
+    airport.path.clear();
+    AddBestPath(airport);
+    airport.visited=true;
+    q.push(&airport);
+
+    while (!q.empty()) {
+        Airport u = *q.front();
+        q.pop();
+        for (auto iter = u.flights.begin(); iter != u.flights.end(); iter++) {
+            Flight& e = iter->second;
+            string wTarget = e.target;
+            Airport &w = airports[wTarget];
+
+            if(!w.visited){
+                q.push(&w);
+                w.distance = airport.distance+1;
+                w.visited = true;
+            }
+        }
+    }
+}
+
+void Graph::print_graphDiametro(){
+    for (auto& aMap : airports){
+        Airport& airport = aMap.second;
+        airport.visited = false;
+    }
+    int max = 0;
+    for(auto aMap : airports){
+        Airport& airport = aMap.second;
+        if(!airport.visited){
+            bfs_Diametro(airport);
+            for (auto amap : airports) {
+                Airport& w = amap.second;
+
+                int distance = w.distance;
+                if(distance > max) max = distance;
+            }
+        }
+    }
+
+    cout << "This network's diameter is: " << max << "\n";
+}
+
 void Graph::dfs_minimum_airlines(string src, string target){
     unordered_set<string> temp;
     Airport &target_airport = airports[target];
