@@ -215,18 +215,17 @@ void searchMenu(Graph *graph){
                         cout << "Please enter the city of your departure or write back to go back\n";
                         cin.clear();
                         cin.ignore(INT_MAX, '\n');
-                        cin >> src;
+                        getline(cin, src);
 
                         while (!graph->isValidCity(src) && src != "back") {
                             cout << "Please enter a valid city!\n";
                             cin.clear();
                             cin.ignore(INT_MAX, '\n');
-                            cin >> src;
+                            getline(cin, src);
                         }
                         if (src == "back") { break; }
                         cout << "Please enter the airport of your destination\n";
                         cin.clear();
-                        cin.ignore(INT_MAX, '\n');
                         cin >> target;
                         while (!is_valid(*graph, target) && target != "back") {
                             cout << "Please enter a valid code/name!\n";
@@ -241,18 +240,17 @@ void searchMenu(Graph *graph){
                         cout << "Please enter the city of your departure or write back to go back\n";
                         cin.clear();
                         cin.ignore(INT_MAX, '\n');
-                        cin >> src;
+                        getline(cin, src);
 
                         while (!graph->isValidCity(src) && src != "back") {
                             cout << "Please enter a valid city!\n";
                             cin.clear();
                             cin.ignore(INT_MAX, '\n');
-                            cin >> src;
+                            getline(cin, src);
                         }
                         if (src == "back") { break; }
                         cout << "Please enter the airport of your destination\n";
                         cin.clear();
-                        cin.ignore(INT_MAX, '\n');
                         cin >> target;
                         while (!is_valid(*graph, target) && target != "back") {
                             cout << "Please enter a valid code/name!\n";
@@ -327,8 +325,7 @@ void searchMenu(Graph *graph){
                                                   graph->find_code(target), airlines);
                     }
                     else if(in == 2) {
-                        cout
-                                << "Please enter the latitude, longitude and radius of the area of your departure, separated by a comma\n";
+                        cout << "Please enter the latitude, longitude and radius of the area of your departure, separated by a comma\n";
                         cin.clear();
                         cin.ignore(INT_MAX, '\n');
                         cin >> src;
@@ -374,6 +371,7 @@ void infoMenu(Graph graph){
                 "2 -> Show anything by country\n"
                 "3 -> Show anything by city\n"
                 "4 -> Show anything by airline\n"
+                "5 -> Show anything by network\n"
                 "0 -> Go Back\n";
         while(!(cin >> in)){
             cin.clear();
@@ -383,6 +381,7 @@ void infoMenu(Graph graph){
                     "2 -> Show anything by country\n"
                     "3 -> Show anything by city\n"
                     "4 -> Show anything by airline\n"
+                    "5 -> Show anything by network\n"
                     "0 -> Go Back\n";
         }
         switch(in){
@@ -394,12 +393,12 @@ void infoMenu(Graph graph){
                 cout << "Please enter an airport or write back to go back\n";
                 cin.clear();
                 cin.ignore(INT_MAX, '\n');
-                cin >> str;
+                getline(cin,str);
                 while (!is_valid(graph, str) && str != "back") {
                     cout << "Please enter a valid code/name!\n";
                     cin.clear();
-                    cin.ignore(INT_MAX, '\n');
-                    cin >> str;
+                    //cin.ignore(INT_MAX, '\n');
+                    getline(cin,str);
                 }
                 if(str == "back"){
                     break;
@@ -411,12 +410,12 @@ void infoMenu(Graph graph){
                 cout << "Please enter a country or write back to go back\n";
                 cin.clear();
                 cin.ignore(INT_MAX, '\n');
-                cin >> str;
+                getline(cin,str);
                 while (!graph.isValidCountry(str) && str != "back") {
                     cin.clear();
-                    cin.ignore(INT_MAX, '\n');
+                    //cin.ignore(INT_MAX, '\n');
                     cout << "Invalid input! Please insert a valid country\n";
-                    cin >> str;
+                    getline(cin,str);
                 }
                 if (str == "back") break;
 
@@ -425,6 +424,7 @@ void infoMenu(Graph graph){
                         "1 -> Number of airports\n"
                         "2 -> Number of flights\n"
                         "3 -> Number of airlines\n"
+                        "4 -> Diameter\n"
                         "0 -> Go Back\n";
                 while (!(cin >> in)) {
                     cin.clear();
@@ -434,8 +434,10 @@ void infoMenu(Graph graph){
                             "1 -> Number of airports\n"
                             "2 -> Number of flights\n"
                             "3 -> Number of airlines\n"
+                            "4 -> Diameter\n"
                             "0 -> Go Back\n";
                 }
+                unordered_set<string> tempSeFizermosSoComUmIDK;
                 switch (in) {
                     case 0:
                         break;
@@ -448,6 +450,10 @@ void infoMenu(Graph graph){
                     case 3:
                         graph.print_typeInCountry(str, "airlines");
                         break;
+                    case 4:
+                        tempSeFizermosSoComUmIDK.insert(str);
+                        graph.print_DiametroCountries(tempSeFizermosSoComUmIDK);
+                        break;
                     default:
                         cout << "Invalid input\n";
                         break;
@@ -459,12 +465,12 @@ void infoMenu(Graph graph){
                 cout << "Please enter a city or write back to go back\n";
                 cin.clear();
                 cin.ignore(INT_MAX, '\n');
-                cin >> str;
+                getline(cin,str);
                 while (!graph.isValidCity(str) && str != "back") {
                     cin.clear();
-                    cin.ignore(INT_MAX, '\n');
+                    //cin.ignore(INT_MAX, '\n');
                     cout << "Invalid input! Please insert a valid city\n";
-                    cin >> str;
+                    getline(cin,str);
                 }
                 if (str == "back") break;
 
@@ -544,6 +550,46 @@ void infoMenu(Graph graph){
                 }
                 break;
             }
+            case 5:{
+                cout << "What do you wish to do?\n"
+                        "1 -> Show Diameter\n"
+                        "2 -> Show Top K airports by the number of flights\n"
+                        "3 -> Show Top K airports by the number of different airlines\n"
+                        "0 -> Go Back\n";
+                while (!(cin >> in)) {
+                    cin.clear();
+                    cin.ignore(INT_MAX, '\n');
+                    cout << "Invalid input!\n";
+                    cout << "What do you wish to do?\n"
+                            "1 -> Show Diameter\n"
+                            "2 -> Show Top K airports by the number of flights\n"
+                            "3 -> Show Top K airports by the number of different airlines\n"
+                            "0 -> Go Back\n";
+                }
+                switch(in){
+                    case 0: break;
+                    case 1:
+                        graph.print_Diametro();
+                        break;
+                    case 2:
+                        cout << "Insert K: \n";
+                        cin.clear();
+                        cin.ignore(INT_MAX, '\n');
+                        while (!(cin >> in)) {
+                            cin.clear();
+                            cin.ignore(INT_MAX, '\n');
+                            cout << "Invalid input!\n";
+                            cout << "Insert K: \n";
+                            cin >> in;
+                        }
+                        graph.print_topk_flights(in);
+                        break;
+                    default:
+                        cout << "Invalid input!\n";
+                        break;
+                }
+                break;
+            }
             default:
                 cout << "Invalid input\n";
                 break;
@@ -552,7 +598,7 @@ void infoMenu(Graph graph){
 }
 
 int main() {
-    Graph graph = Graph(3020);
+    Graph graph = Graph();
     graph.insertAirports();
     graph.insertAirline();
     graph.insertFlights();
@@ -561,8 +607,6 @@ int main() {
     cout << "begin" << '\n';
     //unordered_set<string> airlines;
     //airlines.insert("ANG");
-    graph.print_graphDiametro();
-
     //graph.print_specificArticulationPoints(airlines);
     //graph.print_totalArticulationPoints();
     //graph.print_bestPath("MAG", "CDG");

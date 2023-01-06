@@ -19,6 +19,7 @@ class Estatisticas {
     unordered_map<string, unordered_set<string>> airlineCountry;
     unordered_map<string, unordered_set<string>> airlineAirports;
 public:
+
     void addCountry(string country, string type);
     void addCity(string city, string type);
     void addAirline(string airline, string type);

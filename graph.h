@@ -12,10 +12,13 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <stack>
-#include <string.h>
+#include <cmath>
+#include <fstream>
+#include <sstream>
 #include "Estatisticas.h"
 
 using namespace std;
+
 class Graph {
     struct Airline{
         string code;
@@ -28,6 +31,7 @@ class Graph {
         string target;
         unordered_set<string> flight_airline;
         bool visited;
+
     };
 
     struct Airport{
@@ -41,14 +45,24 @@ class Graph {
         int flight_nr;
         list<vector<string>> path;
         unordered_map<string, Flight> flights;
+        unordered_set<string> airlines;
         bool visited;
         bool in_stack;
         bool is_articulation;
         int num;
         int low;
-        int parent;
         int children;
         int idx;
+        int operator() (const Airport& p1, const Airport& p2)
+        {
+            return p1.flights.size() > p2.flights.size();
+        }
+    };
+    struct CompareByAirlines{
+        int operator() (const Airport& p1, const Airport& p2)
+        {
+            return p1.airlines.size() > p2.airlines.size();
+        }
     };
     typedef unordered_map<string, Airport> unMap;
     typedef unordered_map<string, Airline> unAir;
@@ -56,7 +70,6 @@ class Graph {
     int n; // Graph size (vertices are numbered from 1 to n)
     unMap airports;     // The list of airports being represented
     unAir airlines;
-    int total_flights;
     int destination_count;
     unordered_set<string> different_airlines;
     unordered_set<string> different_countries;
@@ -64,38 +77,40 @@ class Graph {
     //ciMap cities;
     Estatisticas stats;
 public:
-    Graph(int nodes);
-    vector<Airport> best_flight(string src, string target);
-    void addFlight(string src, string target, string airline);
+    void topk_airlines(int k, priority_queue <Airport, vector<Airport>, CompareByAirlines> &pq);
+    void topk_flights(int k, priority_queue <Airport, vector<Airport>, Airport> &pq);
+    void print_topk_flights(int k);
+    void print_topk_airlines(int k);
+    //vector<Airport> best_flight(string src, string target);
+    //void addFlight(string src, string target, string airline);
     unMap get_airports() {return airports;};
     unAir get_airlines() {return airlines;};
-
+    //dfs
     void dfs(string src, int max);
+    void dfs_airport_info(string src, int max); /**/
     void dfs_by_best_airline(string src, string target, string origin, vector<string> res, unordered_set<string> temp);
-    void dfs_normal(string src, int max);
+    void dfs_minimum_airlines(string src, string target);
     void dfs_articulation(Airport& airport, stack<Airport*>& node_stack, list<Airport>* res, int& index, int parent);
     void dfs_specificArticulation(Airport& airport, stack<Airport*>& airport_stack, list<Airport> *res, int index, unordered_set<string> airlines);
-
+    //bfs auxiliar methods
     void AddBestPath(Airport& airport);
-    double calculateDistance(double lat1, double lon1, double lat2, double lon2);
-    void AddBranch(list<vector<string>> path, vector<string> best_path, Airport& airport);
-    void AddBranch(list<vector<string>> path, Airport& airport);
     void AddPath(Airport& airport);
-
+    void AddBranch(list<vector<string>> path, Airport& airport);
+    void AddBranch(list<vector<string>> path, vector<string> best_path, Airport& airport);
+    double calculateDistance(double lat1, double lon1, double lat2, double lon2);
+    //bfs
     void bfs(string src, string target);
     void bfs(string src, string target, unordered_set<string> airlines);
     void bfs_bycity(string city, string target);
     void bfs_bycity(string city, string target, unordered_set<string> airlines);
-    void dfs_minimum_airlines(string src, string target);
     void bfs_bycords(double latitude, double longitude, double distance, string target);
+    //to implement
     void bfs_bycords(double latitude, double longitude, double distance, string target, unordered_set<string> airlines);
     void bfs_Diametro(Airport& airport);
-
-
-
-    void insertAirports();
-    void insertFlights();
-    void insertAirline();
+    void bfs_DiametroCountry(Airport& airport, unordered_set<string> countries);
+    //printers
+    void print_Diametro();
+    void print_DiametroCountries(unordered_set<string> countries);
 
     void print_totalArticulationPoints();
     void print_specificArticulationPoints(unordered_set<string> airlines);
@@ -105,8 +120,6 @@ public:
     void print_typeByAirline(string airline, string type);
     void print_nCountriesAirline(string airline);
     void print_nAirportsAirline(string airline);
-
-    void print_graphDiametro();
 
     void print_bestDistance(Airport airport);
     void print_bestDistance(string src, string target);
@@ -120,15 +133,20 @@ public:
     void print_flightnr(Airport airport);
     void print_bestflightnr(string src, string target);
     void print_bestflightnr(string src, string target, unordered_set<string> airlines);
-    void print_all_flights(string src);
+    void printAll(string src, string target);
+    void printAll(string src, string target, unordered_set<string> airlines);
+
     void print_all_different_airlines(string src);
     void print_all_different_destinies(string src);
     void print_all_different_countries(string src);
     void print_all_different_cities(string src);
     void print_all_airport_information(string src);
     void print_all_airport_information_in_range(string src, int max);
-    void printAll(string src, string target);
-    void printAll(string src, string target, unordered_set<string> airlines);
+
+    //file reading
+    void insertAirports();
+    void insertFlights();
+    void insertAirline();
 
     string find_code(string name);
     bool isValidCity(string city);
