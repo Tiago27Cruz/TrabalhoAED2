@@ -1,10 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj"
-  "CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj.d"
   "CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj"
   "CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj.d"
-  "CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj"
-  "CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj.d"
   "CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj"
   "CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj.d"
   "CMakeFiles/TrabalhoAED2.dir/main.cpp.obj"

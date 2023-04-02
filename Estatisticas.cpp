@@ -4,6 +4,12 @@
 
 #include "Estatisticas.h"
 
+void Estatisticas::addAirportNameCode(string code, string name){
+    if(airportNameCode.find(name) == airportNameCode.end()){
+        airportNameCode.insert(pair<string, string>(name, code));
+    }
+}
+
 void Estatisticas::addCountry(string country, string type) {
     if (type=="airport") {
         if (countries.find(country) == countries.end()) {
@@ -84,6 +90,12 @@ bool Estatisticas::isValidCity(string city) {
 bool Estatisticas::isValidCountry(string country) {
     return (countries.find(country) != countries.end());
 }
+
+bool Estatisticas::airlineInAirport(string airline, string airport){
+    return(airlineAirports[airline].find(airport) != airlineAirports[airline].end());
+}
+
+
 void Estatisticas::print_typeInCountry(string country, string type) {
     if(type == "airport")cout << "There are " << countries[country][0] << " airports in " << country << '\n';
     else if(type == "flights")cout << "There are " << countries[country][1] << " flights coming from " << country << '\n';
@@ -105,4 +117,9 @@ void Estatisticas::print_nCountriesAirline(string airline) {
 
 void Estatisticas::print_nAirportsAirline(std::string airline) {
     cout << airline << " is active in " << airlineAirports[airline].size() << " airports\n";
+}
+
+string Estatisticas::find_code(string name){
+    if(airportNameCode.find(name) != airportNameCode.end()) return airportNameCode[name];
+    return "error";
 }

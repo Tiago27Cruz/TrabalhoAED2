@@ -82,22 +82,10 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/migue/trabalho/ESTUDAR AED/TrabalhoAED2/Airport.cpp">
-			<Option target="TrabalhoAED2"/>
-		</Unit>
-		<Unit filename="C:/Users/migue/trabalho/ESTUDAR AED/TrabalhoAED2/Airport.h">
-			<Option target="TrabalhoAED2"/>
-		</Unit>
 		<Unit filename="C:/Users/migue/trabalho/ESTUDAR AED/TrabalhoAED2/Estatisticas.cpp">
 			<Option target="TrabalhoAED2"/>
 		</Unit>
 		<Unit filename="C:/Users/migue/trabalho/ESTUDAR AED/TrabalhoAED2/Estatisticas.h">
-			<Option target="TrabalhoAED2"/>
-		</Unit>
-		<Unit filename="C:/Users/migue/trabalho/ESTUDAR AED/TrabalhoAED2/flight.cpp">
-			<Option target="TrabalhoAED2"/>
-		</Unit>
-		<Unit filename="C:/Users/migue/trabalho/ESTUDAR AED/TrabalhoAED2/flight.h">
 			<Option target="TrabalhoAED2"/>
 		</Unit>
 		<Unit filename="C:/Users/migue/trabalho/ESTUDAR AED/TrabalhoAED2/graph.cpp">

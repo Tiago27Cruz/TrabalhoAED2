@@ -82,38 +82,10 @@ CMakeFiles/TrabalhoAED2.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrabalhoAED2.dir/main.cpp.s"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\main.cpp" -o CMakeFiles\TrabalhoAED2.dir\main.cpp.s
 
-CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj: CMakeFiles/TrabalhoAED2.dir/flags.make
-CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj: ../Airport.cpp
-CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj: CMakeFiles/TrabalhoAED2.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj -MF CMakeFiles\TrabalhoAED2.dir\Airport.cpp.obj.d -o CMakeFiles\TrabalhoAED2.dir\Airport.cpp.obj -c "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\Airport.cpp"
-
-CMakeFiles/TrabalhoAED2.dir/Airport.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrabalhoAED2.dir/Airport.cpp.i"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\Airport.cpp" > CMakeFiles\TrabalhoAED2.dir\Airport.cpp.i
-
-CMakeFiles/TrabalhoAED2.dir/Airport.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrabalhoAED2.dir/Airport.cpp.s"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\Airport.cpp" -o CMakeFiles\TrabalhoAED2.dir\Airport.cpp.s
-
-CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj: CMakeFiles/TrabalhoAED2.dir/flags.make
-CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj: ../flight.cpp
-CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj: CMakeFiles/TrabalhoAED2.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj -MF CMakeFiles\TrabalhoAED2.dir\flight.cpp.obj.d -o CMakeFiles\TrabalhoAED2.dir\flight.cpp.obj -c "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\flight.cpp"
-
-CMakeFiles/TrabalhoAED2.dir/flight.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrabalhoAED2.dir/flight.cpp.i"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\flight.cpp" > CMakeFiles\TrabalhoAED2.dir\flight.cpp.i
-
-CMakeFiles/TrabalhoAED2.dir/flight.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrabalhoAED2.dir/flight.cpp.s"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\flight.cpp" -o CMakeFiles\TrabalhoAED2.dir\flight.cpp.s
-
 CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj: CMakeFiles/TrabalhoAED2.dir/flags.make
 CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj: ../graph.cpp
 CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj: CMakeFiles/TrabalhoAED2.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj -MF CMakeFiles\TrabalhoAED2.dir\graph.cpp.obj.d -o CMakeFiles\TrabalhoAED2.dir\graph.cpp.obj -c "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\graph.cpp"
 
 CMakeFiles/TrabalhoAED2.dir/graph.cpp.i: cmake_force
@@ -127,7 +99,7 @@ CMakeFiles/TrabalhoAED2.dir/graph.cpp.s: cmake_force
 CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj: CMakeFiles/TrabalhoAED2.dir/flags.make
 CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj: ../Estatisticas.cpp
 CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj: CMakeFiles/TrabalhoAED2.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj -MF CMakeFiles\TrabalhoAED2.dir\Estatisticas.cpp.obj.d -o CMakeFiles\TrabalhoAED2.dir\Estatisticas.cpp.obj -c "C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\Estatisticas.cpp"
 
 CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.i: cmake_force
@@ -141,8 +113,6 @@ CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.s: cmake_force
 # Object files for target TrabalhoAED2
 TrabalhoAED2_OBJECTS = \
 "CMakeFiles/TrabalhoAED2.dir/main.cpp.obj" \
-"CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj" \
-"CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj" \
 "CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj" \
 "CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj"
 
@@ -150,15 +120,13 @@ TrabalhoAED2_OBJECTS = \
 TrabalhoAED2_EXTERNAL_OBJECTS =
 
 TrabalhoAED2.exe: CMakeFiles/TrabalhoAED2.dir/main.cpp.obj
-TrabalhoAED2.exe: CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj
-TrabalhoAED2.exe: CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj
 TrabalhoAED2.exe: CMakeFiles/TrabalhoAED2.dir/graph.cpp.obj
 TrabalhoAED2.exe: CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.obj
 TrabalhoAED2.exe: CMakeFiles/TrabalhoAED2.dir/build.make
 TrabalhoAED2.exe: CMakeFiles/TrabalhoAED2.dir/linklibs.rsp
 TrabalhoAED2.exe: CMakeFiles/TrabalhoAED2.dir/objects1.rsp
 TrabalhoAED2.exe: CMakeFiles/TrabalhoAED2.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable TrabalhoAED2.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="C:\Users\migue\trabalho\ESTUDAR AED\TrabalhoAED2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable TrabalhoAED2.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\TrabalhoAED2.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

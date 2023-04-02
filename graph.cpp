@@ -4,64 +4,6 @@
 
 #include "graph.h"
 
-
-void Graph::topk_flights(int k, priority_queue <Airport, vector<Airport>, Airport> &pq){
-    for(unordered_map<string, Airport>::iterator it = airports.begin(); it != airports.end(); it++){
-        Airport airport = it->second;
-        if(pq.size() < k){
-            pq.push(airport);
-        }
-        else{
-            if(airport.flights.size() > pq.top().flights.size()){
-                pq.pop();
-                pq.push(airport);
-            }
-        }
-    }
-}
-void Graph::topk_airlines(int k, priority_queue <Airport, vector<Airport>, CompareByAirlines> &pq){
-    for(unordered_map<string, Airport>::iterator it = airports.begin(); it != airports.end(); it++){
-        Airport airport = it->second;
-        if(pq.size() < k) {
-            pq.push(airport);
-        }
-        else {
-            for (unordered_map<string, Flight>::iterator iter = airport.flights.begin(); iter != airport.flights.end(); iter++) {
-                Flight flight = iter->second;
-                for (unordered_set<string>::iterator aether = flight.flight_airline.begin(); aether != flight.flight_airline.end(); aether++) {
-                    if (iter == airport.flights.begin()) different_airlines = flight.flight_airline;
-                    if (different_airlines.find(*aether) == different_airlines.end()) {
-                        different_airlines.insert(*aether);
-                    }
-                }
-            }
-            airport.airlines = different_airlines;
-            if(airport.airlines.size() > pq.top().airlines.size()){
-                pq.pop();
-                pq.push(airport);
-            }
-        }
-    }
-}
-void Graph::print_topk_airlines(int k){
-    priority_queue <Airport, vector<Airport>, CompareByAirlines> pq;
-    topk_airlines(k, pq);
-    cout << "The k airports with the most different airlines are:\n";
-    while(!pq.empty()){
-        cout << pq.top().code << " -> " << pq.top().airlines.size() << '\n';
-        pq.pop();
-    }
-}
-
-void Graph::print_topk_flights(int k){
-    priority_queue <Airport, vector<Airport>, Airport> pq;
-    topk_flights(k, pq);
-    cout << "The k airports with the most flights are:\n";
-    while(!pq.empty()){
-        cout << pq.top().code << " -> " << pq.top().flights.size() << '\n';
-        pq.pop();
-    }
-}
 void Graph::dfs(string src, int max) {
     if(max == 0){
         return;
@@ -103,124 +45,96 @@ void Graph::dfs_airport_info(string src, int max){
     dfs(src, max);
 }
 
-void Graph::dfs_by_best_airline(string src, string target, string origin, vector<string> res, unordered_set<string> temp){
-    Airport &airport = airports[src];
-    if(src == target) {
-        if (!temp.empty()) {
-            res.push_back(*temp.begin());
-            if (airport.path.empty()) {
-                airport.path.push_back(res);
-            } else if (airport.path.front().size() > res.size()) {
-                airport.path.front() = res;
-            }
-        }
-    }
-    else if(airport.flights.size() != 0 && !airport.visited){
-        unordered_set<string> super_temp;
-        for (unordered_map<string, Flight>::iterator iter = airport.flights.begin();iter != airport.flights.end(); iter++) {
-            airport.visited = true;
-            Flight &e = iter->second;
-            string wTarget = e.target;
-            Airport &w = airports[wTarget];
-            if (origin == src) {
-                temp = e.flight_airline;
-            } else {
-                bool change_airline = true;
-                for (unordered_set<string>::iterator it = temp.begin(); it != temp.end(); it++) {
-                    cout << *it << " ";
-                    if (e.flight_airline.find(*it) != e.flight_airline.end()) {
-                        change_airline = false;
-                        super_temp.insert(*it);
-                    }
-                }
-                if (change_airline) {
-                    res.push_back(*temp.begin());
-                    temp = e.flight_airline;
-                } else {
-                    temp = super_temp;
-                }
-            }
-            dfs_by_best_airline(wTarget, target, origin, res, temp);
-            airport.visited = false;
-        }
-    }
-}
-
-void Graph::dfs_minimum_airlines(string src, string target){
-    unordered_set<string> temp;
+void Graph::best_paths_minimum_airlines(string src, string target){
+    bfs(src, target);
+    stack<vector<string>> super_res;
+    stack<vector<string>> path;
     Airport &target_airport = airports[target];
-    target_airport.path.clear();
-    vector<string> res;
-    for(unordered_map<string, Airport>::iterator it = airports.begin(); it != airports.end(); it++){
-        Airport &airport = it->second;
-        airport.visited = false;
+    int min_size;
+    for(vector<string> v : target_airport.path){
+        unordered_set<string> temp;
+        vector<string> res = find_airline(v);
+        if(super_res.empty()){
+            super_res.push(res);
+            path.push(v);
+            min_size = size;
+        }
+        else{
+            if(size <= min_size){
+                if(size == min_size){
+                    super_res.push(res);
+                    path.push(v);
+                }
+                else{
+                    while(!super_res.empty()) {
+                        super_res.pop();
+                        path.pop();
+                    }
+                    super_res.push(res);
+                    path.push(v);
+                    min_size = size;
+                }
+            }
+        }
     }
-    dfs_by_best_airline(src, target, src, res, temp);
-    print_bestPath(target_airport);
+    cout << "The best paths with the least amount of airline changes are:\n";
+    while(!super_res.empty()){
+        vector<string> top_path = path.top();
+        vector<string> top_res = super_res.top();
+        for(int i = 0; i < top_path.size(); i++){
+            if(i != 0) cout << " -> ";
+            if(i != top_path.size()-1)cout << top_path[i] << "(" << top_res[i] << ")";
+            else cout << top_path[i] << '\n';
+        }
+        super_res.pop();
+        path.pop();
+    }
+    cout << min_size << " total airline changes\n";
 }
 
-void Graph::dfs_articulation(Airport& airport, stack<Airport*>& airport_stack, list<Airport> *res, int& index, int parent) {
-    airport.children = 0;
+void Graph::dfs_articulation(Airport& airport, stack<Airport*>& airport_stack, list<Airport>& res, int index) {
     airport.visited = true;
-    airport.num = airport.low = ++index;
+    airport.num = index;
+    airport.low = index;
+    airport.in_stack = true;
+    int child = 0;
+    bool isArticulation = false;
+    airport_stack.push(&airport);
 
-    //airport.in_stack = true;
-    //airport_stack.push(&airport);
-
-    //int count = 0;
     for (unordered_map<string, Flight>::iterator iter = airport.flights.begin(); iter != airport.flights.end(); iter++) {
         Flight& e = iter->second;
         string wTarget = e.target;
         Airport& w = airports[wTarget];
 
         if (!w.visited) {
-            //count++;
-            airport.children++;
-
-            dfs_articulation(w, airport_stack, res, index, airport.idx);
-
+            child++;
+            dfs_articulation(w, airport_stack, res, ++index);
             airport.low = min(airport.low, w.low);
-
-            if(parent != -1 && w.low >= airport.num){
-                if(!airport.is_articulation){
-                    res->push_back(airport);
-                    airport.is_articulation = true;
-                }
-
-            }
+            if(w.low >= airport.num) isArticulation=true;
         }
-        else if (airport.idx != parent) {
+        else if (w.in_stack) {
             airport.low = min(airport.low, w.num);
         }
-        /*
-        if (airport.num != 1 && !airport.is_articulation && w.low >= airport.num) {
-            res->push_back(airport);
-            airport.is_articulation = true;
-        }
-        else if (!airport.is_articulation && airport.num == 1 && count > 1) {
-            res->push_back(airport);
-            airport.is_articulation = true;
-        }
-         */
     }
-    if(parent == -1 && airport.children > 1){
-        if(!airport.is_articulation){
-            res->push_back(airport);
-            airport.is_articulation = true;
-        }
+
+
+    airport_stack.top()->in_stack = false;
+    airport_stack.pop();
+
+    if((airport.num > 1 && isArticulation) || (airport.num==1 && child > 1)){
+        res.push_front(airport);
     }
-    //res->sort();
 }
 
-void Graph::dfs_specificArticulation(Airport& airport, stack<Airport*>& airport_stack, list<Airport> *res, int index, unordered_set<string> airlines) {
+void Graph::dfs_articulation(Airport& airport, stack<Airport*>& airport_stack, list<Airport>& res, int index, unordered_set<string> airlines) {
     airport.visited = true;
     airport.low = index;
     airport.num = index;
-    index++;
     airport.in_stack = true;
+    int child = 0;
+    bool isArticulation = false;
     airport_stack.push(&airport);
 
-    int count = 0;
     for (unordered_map<string, Flight>::iterator iter = airport.flights.begin(); iter != airport.flights.end(); iter++) {
         Flight& e = iter->second;
         string wTarget = e.target;
@@ -230,23 +144,22 @@ void Graph::dfs_specificArticulation(Airport& airport, stack<Airport*>& airport_
             if(airlines.find(*it) == airlines.end()) continue;
 
             if (!w.visited) {
-                count++;
-                //dfs_articulation(w, airport_stack, res, index);
+                child++;
+                dfs_articulation(w, airport_stack, res, ++index);
                 airport.low = min(airport.low, w.low);
+                if(w.low >= airport.num)isArticulation=true;
             }
             else if (w.in_stack) {
                 airport.low = min(airport.low, w.num);
             }
-
-            if (airport.num != 1 && !airport.is_articulation && w.low >= airport.num) {
-                res->push_back(airport);
-                airport.is_articulation = true;
-            }
-            else if (!airport.is_articulation && airport.num == 1 && count > 1) {
-                res->push_back(airport);
-                airport.is_articulation = true;
-            }
+            break;
         }
+    }
+    airport_stack.top()->in_stack = false;
+    airport_stack.pop();
+
+    if((airport.num > 1 && isArticulation) || (airport.num==1 && child > 1)){
+        res.push_front(airport);
     }
 }
 
@@ -530,6 +443,47 @@ void Graph::bfs_bycords(double latitude, double longitude, double distance, stri
     target_airport.flight_nr=flight_nr;
     target_airport.distance=dist;
 }
+void Graph::bfs_bycords(double latitude, double longitude, double distance, string target, unordered_set<string> airlines){
+    double dist = -1.0;
+    list<vector<string>> path;
+    int flight_nr = -1;
+    Airport &target_airport = airports[target];
+    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
+        Airport& airport = iter->second;
+        double d = calculateDistance(latitude, longitude, airport.latitude, airport.longitude);
+        if(d <= distance){
+            bfs(airport.code, target, airlines);
+            if ((target_airport.flight_nr <= flight_nr || flight_nr == -1) && target_airport.flight_nr != -1) {
+                if (target_airport.flight_nr == flight_nr) {
+                    if (target_airport.distance < distance) {
+                        dist = target_airport.distance;
+                        flight_nr = target_airport.flight_nr;
+                        list<vector<string>> res = target_airport.path;
+                        int count = 0;
+                        path.push_front(res.front());
+                        for (vector<string> &v : res) {
+                            if(count!=0)path.push_back(v);
+                            count++;
+                        }
+                    }
+                    else {
+                        list<vector<string>> res = target_airport.path;
+                        for (vector<string> &v : res) {
+                            path.push_back(v);
+                        }
+                    }
+                } else {
+                    dist = target_airport.distance;
+                    flight_nr = target_airport.flight_nr;
+                    path = target_airport.path;
+                }
+            }
+        }
+    }
+    target_airport.path=path;
+    target_airport.flight_nr=flight_nr;
+    target_airport.distance=dist;
+}
 
 void Graph::bfs_Diametro(Airport& airport) {
     for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
@@ -562,7 +516,7 @@ void Graph::bfs_Diametro(Airport& airport) {
     }
 }
 
-void Graph::bfs_DiametroCountry(Airport& airport, unordered_set<string> countries) {
+void Graph::bfs_DiametroCountry(Airport& airport, string country) {
     for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
         Airport& ap = iter->second;
         ap.visited=false;
@@ -584,7 +538,7 @@ void Graph::bfs_DiametroCountry(Airport& airport, unordered_set<string> countrie
             string wTarget = e.target;
             Airport &w = airports[wTarget];
 
-            if(!w.visited && countries.find(w.country) != countries.end()){
+            if(!w.visited && w.country != country){
                 q.push(&w);
                 w.distance = u.distance+1;
                 w.visited = true;
@@ -593,11 +547,114 @@ void Graph::bfs_DiametroCountry(Airport& airport, unordered_set<string> countrie
     }
 }
 
+void Graph::topk_flights(int k, priority_queue <Airport, vector<Airport>, CompareByFlights> &pq){
+    for(unordered_map<string, Airport>::iterator it = airports.begin(); it != airports.end(); it++){
+        Airport airport = it->second;
+        if(pq.size() < k){
+            pq.push(airport);
+        }
+        else{
+            if(airport.flights.size() > pq.top().flights.size()){
+                pq.pop();
+                pq.push(airport);
+            }
+        }
+    }
+}
+
+void Graph::topk_flightsInAnAirline(int k, priority_queue <Airport, vector<Airport>, CompareByAirlineInFlight> &pq, string airline){
+    for(unordered_map<string, Airport>::iterator it = airports.begin(); it != airports.end(); it++){
+        Airport& airport = it->second;
+        if(!stats.airlineInAirport(airline, airport.code)) continue;
+        airport.airline_count = 0;
+        for(auto mapFlight : airport.flights){
+            Flight flight = mapFlight.second;
+            if(flight.flight_airline.find(airline) != flight.flight_airline.end()){
+                airport.airline_count++;
+            }
+        }
+        if(pq.size() < k){
+            pq.push(airport);
+        }
+        else if(airport.airline_count > pq.top().airline_count){
+            pq.pop();
+            pq.push(airport);
+        }
+    }
+}
+
+void Graph::topk_flightsCountry(int k, priority_queue <Airport, vector<Airport>, CompareByFlights> &pq, string country){
+    for(unordered_map<string, Airport>::iterator it = airports.begin(); it != airports.end(); it++){
+        Airport airport = it->second;
+        if(airport.country!=country) continue;
+        if(pq.size() < k){
+            pq.push(airport);
+        }
+        else{
+            if(airport.flights.size() > pq.top().flights.size()){
+                pq.pop();
+                pq.push(airport);
+            }
+        }
+    }
+}
+
+void Graph::topk_airlines(int k, priority_queue <Airport, vector<Airport>, CompareByAirlines> &pq){
+    for(unordered_map<string, Airport>::iterator it = airports.begin(); it != airports.end(); it++){
+        Airport airport = it->second;
+        if(pq.size() < k) {
+            pq.push(airport);
+        }
+        else {
+            for (unordered_map<string, Flight>::iterator iter = airport.flights.begin(); iter != airport.flights.end(); iter++) {
+                Flight flight = iter->second;
+                for (unordered_set<string>::iterator aether = flight.flight_airline.begin(); aether != flight.flight_airline.end(); aether++) {
+                    if (iter == airport.flights.begin()) different_airlines = flight.flight_airline;
+                    if (different_airlines.find(*aether) == different_airlines.end()) {
+                        different_airlines.insert(*aether);
+                    }
+                }
+            }
+            airport.airlines = different_airlines;
+            if(airport.airlines.size() > pq.top().airlines.size()){
+                pq.pop();
+                pq.push(airport);
+            }
+        }
+    }
+}
+
+void Graph::topk_airlinesCountry(int k, priority_queue <Airport, vector<Airport>, CompareByAirlines> &pq, string country){
+    for(unordered_map<string, Airport>::iterator it = airports.begin(); it != airports.end(); it++){
+        Airport airport = it->second;
+        if(airport.country!=country) continue;
+        if(pq.size() < k) {
+            pq.push(airport);
+        }
+        else {
+            for (unordered_map<string, Flight>::iterator iter = airport.flights.begin(); iter != airport.flights.end(); iter++) {
+                Flight flight = iter->second;
+                for (unordered_set<string>::iterator aether = flight.flight_airline.begin(); aether != flight.flight_airline.end(); aether++) {
+                    if (iter == airport.flights.begin()) different_airlines = flight.flight_airline;
+                    if (different_airlines.find(*aether) == different_airlines.end()) {
+                        different_airlines.insert(*aether);
+                    }
+                }
+            }
+            airport.airlines = different_airlines;
+            if(airport.airlines.size() > pq.top().airlines.size()){
+                pq.pop();
+                pq.push(airport);
+            }
+        }
+    }
+}
+
 void Graph::print_Diametro(){
-    /*for (auto& aMap : airports){
+    for (auto& aMap : airports){
         Airport& airport = aMap.second;
         airport.visited = false;
-    }*/
+    }
     int max = 0;
     for(auto it = airports.begin(); it != airports.end(); it++){
         Airport& airport = it->second;
@@ -611,19 +668,19 @@ void Graph::print_Diametro(){
     cout << "This network's diameter is: " << max << "\n";
 }
 
-void Graph::print_DiametroCountries(unordered_set<string> countries){
-    /*for (auto& aMap : airports){
+void Graph::print_DiametroCountry(string country){
+    for (auto& aMap : airports){
         Airport& airport = aMap.second;
         airport.visited = false;
-    }*/
+    }
     int max = 0;
     for(auto it = airports.begin(); it != airports.end(); it++){
         Airport& airport = it->second;
-        if(countries.find(airport.country) == countries.end()) continue;
-        bfs_DiametroCountry(airport, countries);
+        if(airport.country != country) continue;
+        bfs_DiametroCountry(airport, country);
         for(auto iter = it; iter != airports.end(); iter++){
             Airport& w = iter->second;
-            if(countries.find(w.country) == countries.end()) continue;
+            if(w.country != country) continue;
             int distance = w.distance;
             if(distance > max) max = distance;
         }
@@ -633,26 +690,19 @@ void Graph::print_DiametroCountries(unordered_set<string> countries){
 
 void Graph::print_totalArticulationPoints() {
     list<Airport> res;
-    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
-        Airport& airport = iter->second;
-        airport.visited=false;
-        airport.distance=-1.0;
-        airport.flight_nr=-1;
-        airport.path.clear();
-        airport.in_stack = false;
-        airport.is_articulation = false;
-        airport.num = 0;
-        airport.idx = 0;
-    }
-    int index = 0;
-    int idx = 0;
     stack<Airport*> airport_stack;
     for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
         Airport& airport = iter->second;
-        airport.idx = idx;
+        airport.visited=false;
+        airport.in_stack = false;
+        airport.num = 0;
+        airport.low = 0;
+    }
+    int idx = 1;
+    for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
+        Airport& airport = iter->second;
         if (!airport.visited){
-            //cout << airport.code << "\n";
-            dfs_articulation(airport, airport_stack, &res, index, -1);
+            dfs_articulation(airport, airport_stack, res, idx);
         }
         idx++;
     }
@@ -662,10 +712,6 @@ void Graph::print_totalArticulationPoints() {
         return;
     }
     cout << "The articulation points are: " << res.size() << "\n";
-    for(Airport airport : res){
-        cout << airport.code << "\n";
-    }
-    //return answer;
 }
 
 void Graph::print_specificArticulationPoints(unordered_set<string> airlines) {
@@ -673,17 +719,15 @@ void Graph::print_specificArticulationPoints(unordered_set<string> airlines) {
     for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
         Airport& airport = iter->second;
         airport.visited=false;
-        airport.distance=-1.0;
-        airport.flight_nr=-1;
-        airport.path.clear();
         airport.in_stack = false;
-        airport.is_articulation = false;
+        airport.num = 0;
+        airport.low = 0;
     }
     stack<Airport*> airport_stack;
     for (unMap::iterator iter = airports.begin(); iter != airports.end(); iter++){
         Airport& airport = iter->second;
         if (!airport.visited)
-            dfs_specificArticulation(airport, airport_stack, &res, 1, airlines);
+            dfs_articulation(airport, airport_stack, res, 1, airlines);
     }
 
     if(res.empty()){
@@ -735,25 +779,140 @@ void Graph::print_bestDistance(string src, string target){
     Airport& airport = airports[target];
     print_bestDistance(airport);
 }
-
+vector<string> Graph::find_airline(vector<string> res, unordered_set<string> check){
+    unordered_set<string> temp;
+    vector<string> airlines;
+    int count = 0;
+    size = 0;
+    for(int i = 1; i < res.size(); i++) {
+        Airport &current_airport = airports[res[i - 1]];
+        Flight &flight = current_airport.flights[res[i]];
+        if (i == 1) {
+            temp = check;
+            count = 1;
+            if (i == res.size() - 1) count++;
+            while (count > 0) {
+                airlines.push_back(*temp.begin());
+                count--;
+            }
+            count = 1;
+        } else {
+            unordered_set<string> super_temp;
+            bool change_airline = true;
+            for (unordered_set<string>::iterator it = temp.begin(); it != temp.end(); it++) {
+                if (flight.flight_airline.find(*it) != flight.flight_airline.end()) {
+                    change_airline = false;
+                    super_temp.insert(*it);
+                }
+            }
+            if (change_airline || i == res.size() - 1) {
+                if (i == res.size() - 1) count++;
+                while (count > 0) {
+                    airlines.push_back(*temp.begin());
+                    count--;
+                }
+                temp = flight.flight_airline;
+                count = 1;
+                size++;
+            } else {
+                count++;
+                temp = super_temp;
+            }
+        }
+    }
+    return airlines;
+}
+vector<string> Graph::find_airline(vector<string> res){
+    unordered_set<string> temp;
+    vector<string> airlines;
+    int count = 0;
+    size = 0;
+    for(int i = 1; i < res.size(); i++) {
+        Airport &current_airport = airports[res[i - 1]];
+        Flight &flight = current_airport.flights[res[i]];
+        if (i == 1) {
+            temp = flight.flight_airline;
+            count = 1;
+            if (i == res.size() - 1) count++;
+            while (count > 0) {
+                airlines.push_back(*temp.begin());
+                count--;
+            }
+            count = 1;
+        } else {
+            unordered_set<string> super_temp;
+            bool change_airline = true;
+            for (unordered_set<string>::iterator it = temp.begin(); it != temp.end(); it++) {
+                if (flight.flight_airline.find(*it) != flight.flight_airline.end()) {
+                    change_airline = false;
+                    super_temp.insert(*it);
+                }
+            }
+            if (change_airline || i == res.size() - 1) {
+                if (i == res.size() - 1) count++;
+                while (count > 0) {
+                    airlines.push_back(*temp.begin());
+                    count--;
+                }
+                temp = flight.flight_airline;
+                count = 1;
+                size++;
+            } else {
+                count++;
+                temp = super_temp;
+            }
+        }
+    }
+    return airlines;
+}
 void Graph::print_bestPath(Airport airport){
     if(airport.path.empty()){
         cout << "There is no path available\n";
         return;
     }
-
+    cout << airport.path.front().size();
+    vector<string> airlines;
     cout << "Possible paths :\n";
-    for(list<vector<string>>::iterator iter=airport.path.begin(); iter!=airport.path.end(); ++iter) {
-        for (int j = 0; j<iter->size(); j++) {
+    for(vector<string> v : airport.path) {
+        for (int j = 0; j<v.size(); j++) {
             if(j!=0) cout << " -> ";
-            cout << iter->at(j);
+            else if(v.size() > 1) airlines = find_airline(v);
+            if(j != v.size()-1 && v.size() > 1) cout << v[j] << "(" << airlines[j] << ")";
+            else cout << v[j];
+        }
+        cout << '\n';
+    }
+    cout << "The shortest path is :\n";
+    for(int i = 0; i<airport.path.front().size(); i++) {
+        if(i != 0 && airport.path.front().size() > 1) cout << " -> ";
+        else if(airport.path.front().size() > 1) airlines = find_airline(airport.path.front());
+        if(i != airport.path.front().size()-1 && airport.path.front().size() > 1) cout << airport.path.front()[i] << "(" << airlines[i] << ")";
+        else cout << airport.path.front()[i];
+    }
+    cout << '\n';
+}
+void Graph::print_bestPath(Airport airport, unordered_set<string> check){
+    if(airport.path.empty()){
+        cout << "There is no path available\n";
+        return;
+    }
+    vector<string> airlines;
+    cout << "Possible paths :\n";
+    for(vector<string> v : airport.path) {
+        for (int j = 0; j<v.size(); j++) {
+            if(j!=0) cout << " -> ";
+            else airlines = find_airline(v, check);
+            if(j != v.size()-1) cout << v[j] << "(" << airlines[j] << ")";
+            else cout << v[j];
         }
         cout << '\n';
     }
     cout << "The shortest path is :\n";
     for(int i = 0; i<airport.path.front().size(); i++) {
         if(i != 0) cout << " -> ";
-        cout << airport.path.front()[i];
+        else airlines = find_airline(airport.path.front(), check);
+        if(i != airport.path.front().size()-1) cout << airport.path.front()[i] << "(" << airlines[i] << ")";
+        else cout << airport.path.front()[i];
     }
     cout << '\n';
 }
@@ -765,7 +924,7 @@ void Graph::print_bestPath(string src, string target){
 void Graph::print_bestPath(string src, string target, unordered_set<string> airlines){
     bfs(src, target, airlines);
     Airport &airport = airports[target];
-    print_bestPath(airport);
+    print_bestPath(airport, airlines);
 }
 
 void Graph::print_bestCityPath(string src, string target){
@@ -776,7 +935,7 @@ void Graph::print_bestCityPath(string src, string target){
 void Graph::print_bestCityPath(string src, string target, unordered_set<string> airlines){
     bfs_bycity(src, target, airlines);
     Airport &airport = airports[target];
-    print_bestPath(airport);
+    print_bestPath(airport, airlines);
 }
 
 void Graph::print_bestCordPath(double latitude, double longitude, double distance, string target){
@@ -791,10 +950,10 @@ void Graph::print_bestCordPath(double latitude, double longitude, double distanc
 }
 
 void Graph::print_bestCordPath(double latitude, double longitude, double distance, string target, unordered_set<string> airlines){
-    //bfs_bycords(latitude, longitude, distance, target, airlines);
+    bfs_bycords(latitude, longitude, distance, target, airlines);
     Airport &airport = airports[target];
     if(airport.flight_nr != -1) {
-        print_bestPath(airport);
+        print_bestPath(airport, airlines);
         print_bestDistance(airport);
     } else{
         cout << "no flight found";
@@ -840,6 +999,74 @@ void Graph::printAll(string src, string target, unordered_set<string> airlines){
     print_flightnr(airport);
     print_bestDistance(airport);
     cout << '\n';
+}
+
+void Graph::print_topk_airlines(int k){
+    priority_queue <Airport, vector<Airport>, CompareByAirlines> pq;
+    topk_airlines(k, pq);
+    cout << "The k airports with the most different airlines are:\n";
+    while(!pq.empty()){
+        k--;
+        cout << pq.top().code << " -> " << pq.top().airlines.size() << '\n';
+        pq.pop();
+    }
+    if(k>0){
+        cout << "There are no more airports to show!\n";
+    }
+}
+
+void Graph::print_topk_airlinesCountry(int k, string country){
+    priority_queue <Airport, vector<Airport>, CompareByAirlines> pq;
+    topk_airlinesCountry(k, pq, country);
+    cout << "The " << k  << " airports from "<<country<< " with the most different airlines are:\n";
+    while(!pq.empty()){
+        k--;
+        cout << pq.top().code << " -> " << pq.top().airlines.size() << '\n';
+        pq.pop();
+    }
+    if(k>0){
+        cout << "There are no more airports to show!\n";
+    }
+}
+void Graph::print_topk_flightsInAnAirline(int k, string airline){
+    priority_queue <Airport, vector<Airport>, CompareByAirlineInFlight> pq;
+    topk_flightsInAnAirline(k, pq, airline);
+    cout << "The " << k  << " airports with the most flights from "<< airline << " are:\n";
+    while(!pq.empty()){
+        k--;
+        cout << pq.top().code << " -> " << pq.top().airline_count << '\n';
+        pq.pop();
+    }
+    if(k>0){
+        cout << "There are no more airports to show!\n";
+    }
+}
+
+void Graph::print_topk_flights(int k){
+    priority_queue <Airport, vector<Airport>, CompareByFlights> pq;
+    topk_flights(k, pq);
+    cout << "The k airports with the most flights are:\n";
+    while(!pq.empty()){
+        k--;
+        cout << pq.top().code << " -> " << pq.top().flights.size() << '\n';
+        pq.pop();
+    }
+    if(k>0){
+        cout << "There are no more airports to show!\n";
+    }
+}
+void Graph::print_topk_flightsCountry(int k, string country){
+    priority_queue <Airport, vector<Airport>, CompareByFlights> pq;
+    topk_flightsCountry(k, pq, country);
+    cout << "The " << k<< " airports from "<< country << " with the most flights are:\n";
+    while(!pq.empty()){
+        cout << pq.top().code << " -> " << pq.top().flights.size() << '\n';
+        pq.pop();
+        k--;
+    }
+    if(k>0){
+        cout << "There are no more airports to show!\n";
+    }
 }
 
 void Graph::print_all_different_airlines(string src){
@@ -897,6 +1124,7 @@ void Graph::insertAirports() {
         airports.insert(pair<string, Airport>(Code, airport));
         stats.addCountry(Country, "airport");
         stats.addCity(City, "airport");
+        stats.addAirportNameCode(Code, Name);
     }
 }
 
@@ -911,22 +1139,21 @@ void Graph::insertFlights() {
         getline(itStream, source, ',');
         getline(itStream, target, ',');
         getline(itStream, airline, '\r');
-        if(airports[source].flights.find(target) != airports[source].flights.end()){
+        if(airports[source].flights.find(target) != airports[source].flights.end()) {
             Flight &f = airports[source].flights[target];
             f.flight_airline.insert(airline);
-            stats.addCountry(airports[source].country, "flights");
-            stats.addCity(airports[source].city, "flights");
-            stats.addAirline(airline, "flights");
-            stats.addAirlineAirport(airline, airports[source].code);
-            stats.addAirlineCountry(airline, airports[source].country);
-        }
-        else {
+        } else {
             Flight flight;
             flight.source = source;
             flight.target = target;
             airports[source].flights.insert(pair<string, Flight>(target, flight));
             airports[source].flights[target].flight_airline.insert(airline);
         }
+        stats.addCountry(airports[source].country, "flights");
+        stats.addCity(airports[source].city, "flights");
+        stats.addAirline(airline, "flights");
+        stats.addAirlineAirport(airline, airports[source].code);
+        stats.addAirlineCountry(airline, airports[source].country);
     }
 }
 
@@ -957,12 +1184,8 @@ string Graph::find_code(string name) {
     if(airports.find(name) != airports.end()){
         return name;
     }
-    //if (airports.find(name)->second.code==name) return name;
 
-    for (unMap::iterator iter=airports.begin(); iter!=airports.end();++iter) {
-        if (iter->second.name==name) return iter->first;
-    }
-    return "error";
+    return stats.find_code(name);
 }
 
 bool Graph::isValidCity(string city){

@@ -128,30 +128,6 @@ TrabalhoAED2/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/build
 .PHONY : TrabalhoAED2/fast
 
-Airport.obj: Airport.cpp.obj
-.PHONY : Airport.obj
-
-# target to build an object file
-Airport.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/Airport.cpp.obj
-.PHONY : Airport.cpp.obj
-
-Airport.i: Airport.cpp.i
-.PHONY : Airport.i
-
-# target to preprocess a source file
-Airport.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/Airport.cpp.i
-.PHONY : Airport.cpp.i
-
-Airport.s: Airport.cpp.s
-.PHONY : Airport.s
-
-# target to generate assembly for a file
-Airport.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/Airport.cpp.s
-.PHONY : Airport.cpp.s
-
 Estatisticas.obj: Estatisticas.cpp.obj
 .PHONY : Estatisticas.obj
 
@@ -175,30 +151,6 @@ Estatisticas.s: Estatisticas.cpp.s
 Estatisticas.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/Estatisticas.cpp.s
 .PHONY : Estatisticas.cpp.s
-
-flight.obj: flight.cpp.obj
-.PHONY : flight.obj
-
-# target to build an object file
-flight.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/flight.cpp.obj
-.PHONY : flight.cpp.obj
-
-flight.i: flight.cpp.i
-.PHONY : flight.i
-
-# target to preprocess a source file
-flight.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/flight.cpp.i
-.PHONY : flight.cpp.i
-
-flight.s: flight.cpp.s
-.PHONY : flight.s
-
-# target to generate assembly for a file
-flight.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\TrabalhoAED2.dir\build.make CMakeFiles/TrabalhoAED2.dir/flight.cpp.s
-.PHONY : flight.cpp.s
 
 graph.obj: graph.cpp.obj
 .PHONY : graph.obj
@@ -257,15 +209,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... TrabalhoAED2
-	@echo ... Airport.obj
-	@echo ... Airport.i
-	@echo ... Airport.s
 	@echo ... Estatisticas.obj
 	@echo ... Estatisticas.i
 	@echo ... Estatisticas.s
-	@echo ... flight.obj
-	@echo ... flight.i
-	@echo ... flight.s
 	@echo ... graph.obj
 	@echo ... graph.i
 	@echo ... graph.s
